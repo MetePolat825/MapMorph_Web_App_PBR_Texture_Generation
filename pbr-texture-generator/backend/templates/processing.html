@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}MapMorph - Processing{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Welcome to MapMorph: the AI-Powered PBR Texture Generation App!</h1>
+    <p>Upload your images and process them to generate roughness maps or other visualizations.</p>
+    
+    <!-- Upload Section -->
+    <div class="section" id="upload-section">
+        <h2>Upload Images</h2>
+        <input type="file" id="file-input" name="file" multiple>
+        <button onclick="uploadImages()">Upload</button>
+    </div>
+
+    <!-- Uploaded Images Section -->
+    <div class="section" id="uploaded-images" style="border: 2px solid #007BFF; padding: 20px; margin-top: 20px;">
+        <h2>Uploaded Images</h2>
+        <div id="uploaded-images-container" class="image-container"></div>
+    </div>
+
+    <!-- Processed Images Section -->
+    <div class="section" id="processed-images" style="border: 2px solid #28A745; padding: 20px; margin-top: 20px;">
+        <h2>Processed Images</h2>
+        <div id="processed-images-container" class="image-container"></div>
+    </div>
+
+    <div id="progress-container" style="display:none; margin-top: 20px;">
+        <h3>Processing...</h3>
+        <progress id="progress-bar" value="0" max="100"></progress>
+    </div>
+
+    <div id="message"></div>
+
+    <button id="download-btn" style="margin-top: 20px; display:none;" onclick="downloadProcessedImages()">Download Processed Images</button>
+</div>
+
+<script>
+    // Function to handle image upload
+    function uploadImages() {
+        let files = document.getElementById("file-input").files;
+        let formData = new FormData();
+
+        for (let i = 0; i < files.length; i++) {
+            formData.append("file", files[i]);
+        }
+
+        document.getElementById("progress-container").style.display = 'block';
+
+        axios.post('/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            onUploadProgress: function (progressEvent) {
+                if (progressEvent.lengthComputable) {
+                    let percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    document.getElementById("progress-bar").value = percent;
+                }
+            }
+        })
+        .then(response => {
+            displayUploadedImages(files);
+            displayProcessedImages(response.data.files);
+            document.getElementById("download-btn").style.display = 'block';
+            Toastify({
+                text: "Images uploaded and processed successfully!",
+                backgroundColor: "green",
+                duration: 3000
+            }).showToast();
+        })
+        .catch(error => {
+            console.error(error);
+            Toastify({
+                text: "Error uploading images",
+                backgroundColor: "red",
+                duration: 3000
+            }).showToast();
+        });
+    }
+
+    // Function to display uploaded images
+    function displayUploadedImages(files) {
+        let uploadedImagesContainer = document.getElementById("uploaded-images-container");
+        uploadedImagesContainer.innerHTML = ''; // Clear existing images
+
+        for (let i = 0; i < files.length; i++) {
+            let imgElement = document.createElement("img");
+            imgElement.src = URL.createObjectURL(files[i]);
+            imgElement.classList.add("image-thumbnail");
+            uploadedImagesContainer.appendChild(imgElement);
+        }
+    }
+
+    // Function to display processed images
+    function displayProcessedImages(files) {
+        let processedImagesContainer = document.getElementById("processed-images-container");
+        processedImagesContainer.innerHTML = ''; // Clear existing images
+
+        files.forEach(filename => {
+            let imgElement = document.createElement("img");
+            imgElement.src = `/processed/${filename}`;
+            imgElement.classList.add("image-thumbnail");
+            processedImagesContainer.appendChild(imgElement);
+        });
+    }
+
+    // Function to download processed images as a zip
+    function downloadProcessedImages() {
+        window.location.href = '/download/processed.zip';
+    }
+</script>
+{% endblock %}

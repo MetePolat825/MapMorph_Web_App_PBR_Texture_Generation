@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to MapMorph{% endblock %}
+
+{% block content %}
+<style>
+    .overlay {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: url('{{ url_for('static', filename='background.gif') }}') no-repeat center center fixed;
+        background-size: cover;
+        height: 100vh;
+        text-align: center;
+    }
+    .btn {
+        margin: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .btn-primary {
+        background: #007BFF;
+        color: white;
+    }
+    .btn-secondary {
+        background: #28A745;
+        color: white;
+    }
+</style>
+<div class="overlay">
+    <h1>Welcome to MapMorph</h1>
+    <p>Generate high-quality PBR textures from your images with ease.</p>
+    <button class="btn btn-primary" onclick="window.location.href='{{ url_for('processing') }}'">Try for Free</button>
+    <button class="btn btn-secondary" onclick="window.location.href='{{ url_for('auth') }}'">Create Free Account</button>
+</div>
+{% endblock %}

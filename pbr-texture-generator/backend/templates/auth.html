@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}MapMorph - Login/Signup{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Login / Signup</h1>
+    <div class="auth-form">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter your username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password">
+        </div>
+        <button class="btn btn-primary" onclick="login()">Login</button>
+        <button class="btn btn-secondary" onclick="signup()">Signup</button>
+    </div>
+</div>
+
+<script>
+    function login() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        axios.post('/login', { username, password })
+            .then(response => {
+                Toastify({
+                    text: "Logged in successfully!",
+                    backgroundColor: "green",
+                    duration: 3000
+                }).showToast();
+                localStorage.setItem("username", response.data.username);
+                localStorage.setItem("membership", response.data.membership);
+                window.location.href = '/processing'; // Redirect to processing page
+            })
+            .catch(error => {
+                Toastify({
+                    text: "Invalid username or password",
+                    backgroundColor: "red",
+                    duration: 3000
+                }).showToast();
+            });
+    }
+
+    function signup() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        axios.post('/signup', { username, password })
+            .then(response => {
+                Toastify({
+                    text: "Account created successfully!",
+                    backgroundColor: "green",
+                    duration: 3000
+                }).showToast();
+                localStorage.setItem("username", response.data.username);
+                localStorage.setItem("membership", response.data.membership);
+                window.location.href = '/processing'; // Redirect to processing page
+            })
+            .catch(error => {
+                Toastify({
+                    text: "Error creating account",
+                    backgroundColor: "red",
+                    duration: 3000
+                }).showToast();
+            });
+    }
+</script>
+{% endblock %}

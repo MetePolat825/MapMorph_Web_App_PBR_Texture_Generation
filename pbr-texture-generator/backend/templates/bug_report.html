@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}MapMorph - Bug Report{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Report a Bug</h1>
+    <div class="form-group">
+        <textarea id="bug-description" rows="5" placeholder="Describe the bug..."></textarea>
+    </div>
+    <button class="btn btn-primary" onclick="submitBugReport()">Submit</button>
+</div>
+
+<script>
+    function submitBugReport() {
+        const description = document.getElementById("bug-description").value;
+        axios.post('/bug_report', { description })
+            .then(response => {
+                Toastify({
+                    text: "Bug report submitted!",
+                    backgroundColor: "green",
+                    duration: 3000
+                }).showToast();
+            })
+            .catch(error => {
+                Toastify({
+                    text: "Error submitting bug report",
+                    backgroundColor: "red",
+                    duration: 3000
+                }).showToast();
+            });
+    }
+</script>
+{% endblock %}
