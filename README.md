@@ -15,7 +15,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-You can try out MapMorph without any installations using the live website: [[https://github.com/MetePolat825/Map](https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation)]
+You can try out MapMorph without any installations using the live website: [[http://mcp140.pythonanywhere.com](http://mcp140.pythonanywhere.com)]
 
 To run this project locally, you need the following installed on your machine:
 
