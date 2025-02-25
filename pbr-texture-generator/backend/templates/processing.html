@@ -4,9 +4,211 @@
 
 {% block content %}
 
+<!-- Processing Section -->
+
 <div class="container">
     <h1>Welcome to MapMorph: the AI-Powered PBR Texture Generation App!</h1>
     <p>Upload your images and process them to generate roughness maps or other visualizations.</p>
+
+    <!-- Configuration Options Section -->
+<div class="section" id="config-options">
+    <h2>Processing Options</h2>
+
+    <!-- Basic Options (Always Visible) -->
+    <fieldset class="border p-3 mb-3">
+        <legend class="w-auto">Basic Options</legend>
+        
+        <p>Please select your preferred options for processing the textures. You can choose to use AI for material detection or manually select a material from the dropdown.</p>
+        
+        <!-- Material Detection -->
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="segmentation">
+            <label class="form-check-label" for="segmentation">Use AI segmentation to detect multiple materials. Experimental</label>
+        </div>
+        
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="ai-material-detection" onchange="toggleMutuallyExclusiveOptions('ai-material-detection', 'material-selection')">
+            <label class="form-check-label" for="ai-material-detection">Use AI to detect material</label>
+        </div>
+
+        <div class="mb-3">
+            <label for="material-selection" class="form-label">Manual Material Selection</label>
+            <select class="form-select" id="material-selection" enabled>
+                <option>Brick</option>
+                <option>Metal</option>
+                <option>Wood</option>
+                <option>Dirt</option>
+                <option>Glass</option>
+                <option>Stone</option>
+                <option>Plastic</option>
+            </select>
+        </div>
+
+        <!-- Export Settings -->
+        <div class="mb-3">
+            <label for="export-format" class="form-label">Desired Export Format</label>
+            <select class="form-select" id="export-format">
+                <option>PNG</option>
+                <option>JPG</option>
+                <option>TGA</option>
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label for="export-resolution" class="form-label">Target Export Resolution, Resize via Crop by Default</label>
+            <select class="form-select" id="export-resolution">
+                <option>256x256</option>
+                <option selected>512x512</option>
+                <option>1024x1024</option>
+                <option>2048x2048</option>
+                <option>4096x4096</option>
+            </select>
+        </div>
+    </fieldset>
+
+    <!-- Toggle Button for Advanced Options -->
+    <button class="btn btn-secondary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-options">
+        Show/Hide Advanced Options
+    </button>
+
+    <!-- Advanced Options (Collapsible) -->
+    <div class="collapse" id="advanced-options">
+        <fieldset class="border p-3 mb-3">
+            <legend class="w-auto">Advanced AI Processing</legend>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="ai-upscale">
+                <label class="form-check-label" for="ai-upscale">Use AI to upscale/downscale texture</label>
+            </div>
+        </fieldset>
+
+        <fieldset class="border p-3 mb-3">
+            <legend class="w-auto">PBR Processing</legend>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="pbr-standardize" onchange="toggleDropdown('pbr-standardize', 'pbr-preset')">
+                <label class="form-check-label" for="pbr-standardize">Standardize PBR values</label>
+            </div>
+            <div class="mb-3">
+                <label for="pbr-preset" class="form-label">PBR Preset</label>
+                <select class="form-select" id="pbr-preset" disabled>
+                    <option>Default</option>
+                    <option>Unreal Engine Realistic</option>
+                    <option>Source Engine</option>
+                    <option>Unity Stylized</option>
+                </select>
+            </div>
+        </fieldset>
+
+        <fieldset class="border p-3 mb-3">
+            <legend class="w-auto">Texel Density</legend>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="set-texel-ai" onchange="toggleDropdown('set-texel-ai', 'texel-value')">
+                <label class="form-check-label" for="set-texel-ai">Set target texel value using AI</label>
+            </div>
+            <div class="mb-3">
+                <label for="texel-value" class="form-label">Target Texel Density</label>
+                <select class="form-select" id="texel-value" disabled>
+                    <option>Low 256px/m</option>
+                    <option>Medium 512px/m</option>
+                    <option>High 1024px/m</option>
+                </select>
+            </div>
+        </fieldset>
+
+        <fieldset class="border p-3 mb-3">
+            <legend class="w-auto">Output Maps</legend>
+            <div class="mb-3">
+                <label for="workflow" class="form-label">Workflow</label>
+                <select class="form-select" id="workflow">
+                    <option>PBR Spec/Gloss Workflow</option>
+                    <option>PBR Rough/Metallic Workflow</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="normal-bump" class="form-label">Normal or Bump Map</label>
+                <select class="form-select" id="normal-bump">
+                    <option>Normal Map</option>
+                    <option>Bump Map</option>
+                </select>
+            </div>
+        </fieldset>
+
+        <fieldset class="border p-3 mb-3">
+            <legend class="w-auto">Post Processing</legend>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="add-grunge">
+                <label class="form-check-label" for="add-grunge">Add Grunge</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="remove-artifacts">
+                <label class="form-check-label" for="remove-artifacts">Remove Artefacts (Smoothing)</label>
+            </div>
+        </fieldset>
+
+        <fieldset class="border p-3 mb-3">
+            <legend class="w-auto">Additional Processing</legend>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="remove-tiling">
+                <label class="form-check-label" for="remove-tiling">Remove Image Tiling (Make Seamless)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="force-square">
+                <label class="form-check-label" for="force-square">Force Final Texture to be Square (Cropping)</label>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<script>
+    function toggleMutuallyExclusiveOptions(checkboxId, selectId) {
+        const checkbox = document.getElementById(checkboxId);
+        const select = document.getElementById(selectId);
+        select.disabled = checkbox.checked;
+    }
+
+    function toggleDropdown(checkboxId, selectId) {
+        const checkbox = document.getElementById(checkboxId);
+        const select = document.getElementById(selectId);
+        select.disabled = !checkbox.checked;
+    }
+</script>
+
+
+<!-- Preference Buttons -->
+<div class="mt-3">
+    <button id="save-prefs" class="btn btn-success">Save Preferences</button>
+    <button id="load-prefs" class="btn btn-primary" onclick="document.getElementById('file-input-prefs').click();">Load Preferences</button>
+    <input type="file" id="file-input-prefs" style="display: none;" onchange="loadPreferences(event)">
+    <button id="reset-prefs" class="btn btn-danger" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">Reset to Default</button>
+</div>
+
+<div id="preferences-message" class="mt-2"></div>
+
+<!-- Preferences Section -->
+
+<script>
+    document.getElementById("ai-material-detection").addEventListener("change", function() {
+        document.getElementById("material-selection").disabled = this.checked;
+    });
+
+    document.getElementById("save-prefs").addEventListener("click", function() {
+        // Placeholder for actual save logic
+        document.getElementById("preferences-message").innerHTML = 
+            '<div class="alert alert-success" role="alert">Preferences saved! (Requires account)</div>';
+    });
+
+    document.getElementById("reset-prefs").addEventListener("click", function() {
+        // Reset to default values
+        document.getElementById("segmentation").checked = false;
+        document.getElementById("ai-material-detection").checked = false;
+        document.getElementById("material-selection").disabled = false;
+        document.getElementById("ai-upscale").checked = false;
+        document.getElementById("export-format").value = "PNG";
+        document.getElementById("export-resolution").value = "1024x1024";
+
+        document.getElementById("preferences-message").innerHTML = 
+            '<div class="alert alert-warning" role="alert">Preferences reset to default.</div>';
+    });
+</script>
     
     <!-- Upload Section -->
     <div class="section" id="upload-section">
@@ -111,4 +313,72 @@
         window.location.href = '/download/processed.zip';
     }
 </script>
+
+<div class="container text-center mt-4">
+    <h2>3D Texture Preview using Three.js</h2>
+    <div class="preview-container">
+        <canvas id="threejs-canvas"></canvas>
+    </div>
+    <input type="file" id="texture-upload" class="upload-btn" accept="image/*">
+</div>
+
+<!-- Three.js and OrbitControls -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/controls/OrbitControls.js"></script>
+
+<script>
+    let scene, camera, renderer, cube, textureLoader;
+
+    function init() {
+        // Scene setup
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(45, 600 / 400, 0.1, 1000);
+        camera.position.z = 3;
+
+        // Renderer
+        renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(600, 400);
+        document.querySelector('.preview-container').appendChild(renderer.domElement);
+
+        // Cube Geometry
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        textureLoader = new THREE.TextureLoader();
+        const material = new THREE.MeshStandardMaterial({ color: 0xffffff, map: null });
+
+        cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        // Lighting
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(2, 2, 2).normalize();
+        scene.add(light);
+
+        // Controls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+    }
+
+    // Handle Texture Upload
+    document.getElementById('texture-upload').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const url = URL.createObjectURL(file);
+            textureLoader.load(url, function(texture) {
+                cube.material.map = texture;
+                cube.material.needsUpdate = true;
+            });
+        }
+    });
+
+    init();
+</script>
+
 {% endblock %}

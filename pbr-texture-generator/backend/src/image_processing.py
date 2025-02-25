@@ -2,13 +2,15 @@ import cv2
 import numpy as np
 from PIL import Image
 
-def process_image(input_filepath, intensity_factor=2.0):
+def process_image(input_filepath, intensity_factor=1, grey_factor=0.5, user_preferences=None):
     """
-    Process an image by normalizing it to grayscale and adjusting its intensity.
+    Process an image by normalizing it to grayscale and adjusting its intensity towards 50% greyscale.
     
     Parameters:
         input_filepath (str): Path to the uploaded image file.
         intensity_factor (float): Factor by which the intensity will be adjusted.
+        grey_factor (float): Factor to control the shift towards 50% greyscale (0 to 1).
+        user_preferences (dict): User preferences for image processing.
 
     Returns:
         processed_image (numpy.ndarray): The processed image in grayscale with normalized intensity.
@@ -24,7 +26,28 @@ def process_image(input_filepath, intensity_factor=2.0):
     # Adjust intensity by multiplying with intensity_factor
     img_normalized = cv2.convertScaleAbs(img_normalized * intensity_factor)
     
-    return img_normalized
+    # Shift towards 50% greyscale
+    img_grey_shifted = cv2.addWeighted(img_normalized, 1 - grey_factor, np.full_like(img_normalized, 128), grey_factor, 0)
+    
+    # for each run of the image processing pipeline, check the user preferences and apply the selected filters
+    
+    
+    #if user_preferences["generate_roughness_map"] == True:
+    #    generate_roughness_map(input_filepath)
+    #if user_preferences["generate_normal_map"] == True:
+    #    generate_normal_map(input_filepath)
+        
+    #if user_preferences["make_seamless"] == True:
+    #    make_seamless()
+    #if user_preferences["apply_grunge"] == True:
+    #    apply_grunge()
+    #if user_preferences["remove_artefacts"] == True:
+    #    remove_artefacts()
+    #if user_preferences["resize_for_export"] == True:
+    #    resize_for_export()
+    
+    
+    return img_grey_shifted
 
 def resize_and_crop(image_path, size=(512, 512)):
     with Image.open(image_path) as img:
@@ -66,3 +89,21 @@ def generate_normal_map(image_path):
     normal_map = cv2.normalize(normal_map, None, 0, 255, cv2.NORM_MINMAX)
     
     return normal_map
+
+
+def make_seamless():
+    pass
+
+def apply_grunge():
+    pass
+
+def remove_artefacts():
+    """
+    Remove artefacts using a smoothing filter.
+    """
+    
+    pass
+
+def resize_for_export():
+    pass
+

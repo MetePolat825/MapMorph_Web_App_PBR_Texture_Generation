@@ -3,20 +3,53 @@
 {% block title %}MapMorph - Pricing{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>Pricing & Plans</h1>
-    <div class="plans">
-        <div class="plan">
-            <h3>Free</h3>
-            <p>5 uploads per session</p>
-            <p>Basic features</p>
+<div class="container mt-5">
+    <h1 class="text-center">Pricing & Plans</h1>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Free Plan</h3>
+                    <p class="card-text">Basic features, limited AI features.</p>
+                    <p class="card-text">Guest is limited to 5 extractions per hour.</p>
+                    <p class="card-text">Creating a free account raises limit to 30 extractions per hour.</p>
+                    <p class="card-text">Only extract Roughness maps.</p>
+                </div>
+            </div>
         </div>
-        <div class="plan">
-            <h3>Pro</h3>
-            <p>Unlimited uploads</p>
-            <p>Advanced features</p>
-            <p>£5/month</p>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Pro</h3>
+                    <p class="card-text">20 tokens per hour</p>
+                    <p class="card-text">Advanced features access, AI access</p>
+                    <p class="card-text">Extract all maps for Spec/Gloss and Rough/Metallic workflows, PBR value standardization, normal maps generation.</p>
+                    <p class="card-text">£4.99/month subscription</p>
+                </div>
+            </div>
         </div>
+        <div class="col-md-4">
+            <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Token Plan</h3>
+                <p class="card-text">Pay as you go. Multiple options available.</p>
+                <p class="card-text">Advanced features access, AI access.</p>
+                <p class="card-text">£9.99/100 tokens</p>
+                <p class="card-text">£19.99/250 tokens</p>
+                <p class="card-text">£29.99/500 tokens (Best Value)</p>
+            </div>
+            </div>
+        </div>
+        <div class="col-md-12 mt-4">
+            <div class="card">
+            <div class="card-body text-center">
+                <h3 class="card-title">Contact Sales</h3>
+                <p class="card-text">Need a custom plan for your organization or have questions? Contact our sales team.</p>
+                <a href="mailto:mcp140@student.aru.ac.uk" class="btn btn-primary">Contact Sales</a>
+            </div>
+            </div>
+        </div>
+
     </div>
 </div>
 {% endblock %}

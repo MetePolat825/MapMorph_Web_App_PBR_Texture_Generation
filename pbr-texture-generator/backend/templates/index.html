@@ -4,6 +4,7 @@
 
 {% block content %}
 <style>
+    /* Fullscreen Background */
     .overlay {
         display: flex;
         flex-direction: column;
@@ -11,30 +12,191 @@
         align-items: center;
         background: url('{{ url_for('static', filename='background.gif') }}') no-repeat center center fixed;
         background-size: cover;
-        height: 100vh;
+        height: 85vh;
         text-align: center;
+        position: relative;
     }
+
+    /* Dark overlay for readability */
+    .overlay::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1;
+    }
+
+    /* Content box (Glassmorphism) */
+    .content-box {
+        position: relative;
+        z-index: 2;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        max-width: 600px;
+        width: 90%;
+    }
+
+    /* Heading */
+    h1 {
+        font-size: 3rem;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    /* Subtext */
+    p {
+        font-size: 1.2rem;
+        color: #f1f1f1;
+        margin-bottom: 30px;
+    }
+
+    /* Button styling */
     .btn {
         margin: 10px;
-        padding: 10px 20px;
-        font-size: 16px;
+        padding: 12px 25px;
+        font-size: 18px;
         border: none;
-        border-radius: 5px;
+        border-radius: 8px;
         cursor: pointer;
+        transition: 0.3s;
     }
+
     .btn-primary {
         background: #007BFF;
         color: white;
+        box-shadow: 0 3px 10px rgba(0, 123, 255, 0.3);
     }
+
+    .btn-primary:hover {
+        background: #0056b3;
+    }
+
     .btn-secondary {
         background: #28A745;
         color: white;
+        box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-secondary:hover {
+        background: #1e7e34;
     }
 </style>
+
 <div class="overlay">
-    <h1>Welcome to MapMorph</h1>
-    <p>Generate high-quality PBR textures from your images with ease.</p>
-    <button class="btn btn-primary" onclick="window.location.href='{{ url_for('processing') }}'">Try for Free</button>
-    <button class="btn btn-secondary" onclick="window.location.href='{{ url_for('auth') }}'">Create Free Account</button>
+    <div class="content-box">
+        <h1>MapMorph</h1>
+        <p>Generate high-quality PBR textures from your images with ease from desktop or mobile devices. No installationm no dependancies, no hardware required!</p>
+        <button class="btn btn-primary" onclick="window.location.href='{{ url_for('processing') }}'">Try for Free*</button>
+        <button class="btn btn-secondary" onclick="window.location.href='{{ url_for('auth') }}'">Create Free Account</button>
+        <p style="color: #f1f1f1; font-size: 0.9rem; margin-top: 10px;">
+            * 1 map extraction = 1 token <br>
+            * Guests are limited to 5 tokens per hour and have limited functinality. <br>
+            * Creating a free account raises limit to 30 tokens per hour. <br>
+            * Premium AI features are available through our affordable subscription plan. <br>
+            * We offer special deals for cheaper tokens through API access.
+        </p>
+    </div>
 </div>
+
+<!> <!-- Feature list -->
+
+<div class="row flex-lg-row-reverse align-items-center g-sm-5 py-5">
+    <div class="col-lg-6 bg-body-tertiary rounded pt-3">
+      <h1 class="display-5 text-body-emphasis lh-1 mb-3">Generate PBR textures in the web</h1>
+      <p class="lead">MapMorph is a stand-alone software designed for AI-powered texture authoring. Generate PBR textures using text prompts or by drag &amp; dropping your photos.</p>
+    </div>
+    <div class="col-lg-6">
+      <img src="static/mainexample1.jpg" class="d-block mx-lg-auto img-fluid rounded" width="700" height="500" loading="lazy">
+    </div>
+  </div>
+
+
+<div class="row justify-content-end align-items-center g-sm-5 py-5">
+    <div class="col-lg-6 bg-body-tertiary rounded pt-3 text-end">
+        <h1 class="display-5 text-body-emphasis lh-1 mb-3">No installation, no dependancies, no hardware requirements.</h1>
+        <p class="lead">MapMorph is a stand-alone software designed for AI-powered texture authoring. Generate PBR textures using text prompts or by drag &amp; dropping your photos.</p>
+    </div>
+    <div class="col-lg-6 text-end">
+        <img src="static/mainexample2.webp" class="d-block mx-lg-auto img-fluid rounded" width="700" height="500" loading="lazy">
+    </div>
+</div>
+ 
+<div class="row flex-lg-row-reverse align-items-center g-sm-5 py-5">
+    <div class="col-lg-6 bg-body-tertiary rounded pt-3">
+      <h1 class="display-5 text-body-emphasis lh-1 mb-3">Supports multiple PBR workflows</h1>
+      <p class="lead">MapMorph is a stand-alone software designed for AI-powered texture authoring. Generate PBR textures using text prompts or by drag &amp; dropping your photos.</p>
+    </div>
+    <div class="col-lg-6">
+      <img src="static/mainexample1.jpg" class="d-block mx-lg-auto img-fluid rounded" width="700" height="500" loading="lazy">
+    </div>
+  </div>
+
+<div class="row justify-content-end align-items-center g-sm-5 py-5">
+    <div class="col-lg-6 bg-body-tertiary rounded pt-3 text-end">
+        <h1 class="display-5 text-body-emphasis lh-1 mb-3">Available on mobile brosers</h1>
+        <p class="lead">MapMorph is a stand-alone software designed for AI-powered texture authoring. Generate PBR textures using text prompts or by drag &amp; dropping your photos.</p>
+    </div>
+    <div class="col-lg-6 text-end">
+        <img src="static/mainexample1.jpg" class="d-block mx-lg-auto img-fluid rounded" width="700" height="500" loading="lazy">
+    </div>
+</div>
+
+<div class="row flex-lg-row-reverse align-items-center g-sm-5 py-5">
+    <div class="col-lg-6 bg-body-tertiary rounded pt-3">
+      <h1 class="display-5 text-body-emphasis lh-1 mb-3">AI-Powered material detection</h1>
+      <p class="lead">MapMorph is a stand-alone software designed for AI-powered texture authoring. Generate PBR textures using text prompts or by drag &amp; dropping your photos.</p>
+    </div>
+    <div class="col-lg-6">
+      <img src="static/mainexample1.jpg" class="d-block mx-lg-auto img-fluid rounded" width="700" height="500" loading="lazy">
+    </div>
+  </div>
+
+<div class="row justify-content-end align-items-center g-sm-5 py-5">
+    <div class="col-lg-6 bg-body-tertiary rounded pt-3 text-end">
+        <h1 class="display-5 text-body-emphasis lh-1 mb-3">Texel density setter.</h1>
+        <p class="lead">MapMorph is a stand-alone software designed for AI-powered texture authoring. Generate PBR textures using text prompts or by drag &amp; dropping your photos.</p>
+    </div>
+    <div class="col-lg-6 text-end">
+        <img src="static/mainexample1.jpg" class="d-block mx-lg-auto img-fluid rounded" width="700" height="500" loading="lazy">
+    </div>
+</div>
+
+<div class="row flex-lg-row-reverse align-items-center g-sm-5 py-5">
+    <div class="col-lg-6 bg-body-tertiary rounded pt-3">
+      <h1 class="display-5 text-body-emphasis lh-1 mb-3">And many more features!</h1>
+      <p class="lead">MapMorph is a stand-alone software designed for AI-powered texture authoring. Generate PBR textures using text prompts or by drag &amp; dropping your photos.</p>
+    </div>
+    <div class="col-lg-6">
+      <img src="static/mainexample1.jpg" class="d-block mx-lg-auto img-fluid rounded" width="700" height="500" loading="lazy">
+    </div>
+  </div>
+
+
+  <h1 class="display-4 fw-bold text-body-emphasis">Runs Everywhere</h1>
+  <div class="col-lg-6 mx-auto">
+    <p class="lead mb-4">MapMorph is platform agnostic and runs on compatible browsers on <b>Windows</b>, <b>Linux</b>, <b>macOS</b> with <b>iOS</b> and <b>Android</b> support coming soon. Use MapMorph through your preferred browser on your desktop and laptop computers, as well as mobile devices such as tablets and phones.</p>
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+    <a href="{{ url_for('processing') }}"><button type="button" class="btn btn-primary btn-lg px-4 me-sm-3">Get Started Now</button></a>
+
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+    <a href="{{ url_for('pricing') }}"><button type="button" class="btn btn-secondary btn-lg px-4 me-sm-3">Explore access plans</button></a>
+    </div>
+  </div>
+  <div class="overflow-hidden" style="max-height: 40vh;">
+    <div class="container px-5">
+      <img src="static/platforms.png" class="img-fluid rounded-3 mb-4" width="700" height="500" loading="lazy">
+    </div>
+  </div>
+
+
+
+
+
 {% endblock %}

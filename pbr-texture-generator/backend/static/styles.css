@@ -9,6 +9,7 @@
     left: -300px;
     transition: left 0.5s ease;
     padding: 20px;
+    z-index: 1000; /* Ensures it stays above the overlay */
 }
 
 .sidebar.active {
@@ -66,4 +67,51 @@ footer {
 footer a {
     color: #007BFF;
     text-decoration: none;
+}
+
+
+/* Make sure the page content is pushed down to avoid being hidden under the fixed navbar */
+body {
+    padding-top: 70px; /* Adjust for navbar height */
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: #222 !important; /* Dark background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Adds depth */
+}
+
+/* Navbar links */
+.navbar-nav .nav-link {
+    color: white !important;
+    transition: color 0.3s;
+}
+
+/* Hover effect for links */
+.navbar-nav .nav-link:hover {
+    color: #0d6efd !important; /* Bootstrap primary blue */
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    background-color: #333;
+    border: none;
+}
+
+.dropdown-menu .dropdown-item {
+    color: rgb(0, 0, 0);
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #0d6efd;
+}
+
+/* Button Styling */
+.btn-primary {
+    background-color: #0d6efd;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
 }
