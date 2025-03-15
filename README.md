@@ -132,6 +132,28 @@ At this point you may try out all the basic features with no restrictions! Aweso
 ├── README.md <- Developer Documentation
 ├── requirements.txt <- required libraries for local installation
 ```
+## CI/CD Workflow
+
+This project uses **GitHub Actions** for continuous integration and continuous deployment (CI/CD). The GitHub Actions workflow automates the following tasks:
+
+- **Code Testing**: Each push or pull request triggers automated tests using `pytest` to ensure the quality of the code.
+- **Deployment**: After passing the tests, the application is automatically deployed to **PythonAnywhere**, a platform that hosts Python applications.
+
+### GitHub Actions
+
+The CI/CD pipeline is defined in the `.github/workflows/ci.yml` file. The pipeline includes the following steps:
+1. **Install dependencies**: Install required dependencies from `requirements.txt`.
+2. **Run tests**: Execute tests using `pytest` to ensure the code works correctly.
+3. **Deploy to PythonAnywhere**: Upon successful tests, the app is deployed to PythonAnywhere.
+
+### PythonAnywhere Deployment
+
+The project is hosted on **PythonAnywhere**, which provides a cloud-based platform for Python applications. After the GitHub Actions workflow completes, the application is automatically deployed to PythonAnywhere using the provided deployment scripts. The app can be accessed from [PythonAnywhere](https://mcp140.pythonanywhere.com/).
+
+For more details on setting up the GitHub Actions workflow and deploying to PythonAnywhere, check out the following documentation:
+
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [PythonAnywhere Documentation](https://help.pythonanywhere.com/)
 
 # Roadmap
 
