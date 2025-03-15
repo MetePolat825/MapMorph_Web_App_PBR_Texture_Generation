@@ -115,6 +115,24 @@ At this point you may try out all the basic features with no restrictions! Aweso
 
 * Hosting: Heroku
 
+# Project Folder Structure
+
+```bash
+├── backend
+   ├── presets <- PBR value preset CSVs
+   ├── processed <- final processed images to be downloaded to the user
+   ├── src <- image processing scripts and other secondary logic
+   ├── static <- images, icons, CSS
+   ├── templates <- frontend HTML templates
+   ├── tests <- unit tests for app and image processing logic
+   ├── uploads <- user upload directory
+   ├── app.py <- Entry Point for the program
+├── frontend <- contains Javascript frontend components (work in progress)
+├── docs <- contains local copy of documentation for offline access
+├── README.md <- Developer Documentation
+├── requirements.txt <- required libraries for local installation
+```
+
 # Roadmap
 
 ## Future Features:
