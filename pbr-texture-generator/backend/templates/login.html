@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div id="login-form-container">
+    <h2>Login</h2>
+    <form id="login-form" method="POST" action="/login">
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    <div id="login-error" style="color: red;"></div>
+    <p>Don't have an account? <a href="/signup">Sign up here</a></p>
+  </div>
+  <script>
+    document.getElementById('login-form').onsubmit = function(event) {
+      event.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('login-error');
+      
+      // Check for empty fields
+      if (!username || !password) {
+        errorDiv.textContent = 'Username and Password cannot be empty!';
+        return;
+      }
+
+      fetch('/login', {
+        method: 'POST',
+        body: new URLSearchParams({
+          username: username,
+          password: password
+        }),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          window.location.href = '/myaccount';  // Redirect to My Account
+        } else {
+          errorDiv.textContent = 'Invalid Username or Password.';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

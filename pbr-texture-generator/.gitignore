@@ -27,6 +27,8 @@ __pycache__/
 
 # Image files are ignored as they have big filesize
 .jpg
+.webp
+.gif
 .jpeg
 .tga
 .tiff

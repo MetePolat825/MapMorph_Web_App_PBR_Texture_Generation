@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div id="my-account">
+    <h2>Welcome, {{ username }}</h2>
+    <p>This is your account page.</p>
+    <button id="sign-out-btn">Sign Out</button>
+  </div>
+  <script>
+    document.getElementById('sign-out-btn').onclick = function() {
+      fetch('/logout', {
+        method: 'POST'
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          window.location.href = '/login';  // Redirect to login
+        }
+      });
+    }
+  </script>
+</body>
+</html>

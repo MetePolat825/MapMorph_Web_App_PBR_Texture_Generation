@@ -1,15 +1,23 @@
-from flask import Flask, request, jsonify, send_file, render_template, send_from_directory
 import os
-import cv2
 import zipfile
 import shutil
 import json  # For saving presets
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
-from src.image_processing import process_image, resize_and_crop
+from datetime import datetime, timedelta # for token reset logic
+
+import cv2
+
+from flask import Flask, request, jsonify, send_file, render_template, send_from_directory, redirect, request, flash, session, url_for
+
+from src.image_processing import load_presets,greyscale_adjust, resize_and_crop,apply_segmentation, detect_material, apply_upscaling, standardize_pbr, set_texel_density, pre_process_check, generate_normal_map, force_square, add_grunge, remove_artifacts,make_tiling,generate_metallic
 
 # initialize flask app from current file
 app = Flask(__name__)
+#app.config['SECRET_KEY'] = '0123456789'
+
+##################################################################
+# Image processing routes
+# The following routes are used to process images uploaded by the user.
+##################################################################
 
 # create a folder for uploads and processed images
 UPLOAD_FOLDER = 'uploads'
@@ -31,7 +39,6 @@ def clear_folder(folder):
         except Exception as e:
             print(f'Failed to delete {file_path}. Reason: {e}')
 
-
 ##################################################################
 # Routes for the image processing application
 # The routes are defined in the following order:
@@ -50,7 +57,7 @@ def processing():
 # Route for the login/signup page
 @app.route('/auth')
 def auth():
-    return render_template('auth.html')
+    return render_template("auth.html")
 
 # Route for the help page
 @app.route('/help')
@@ -74,7 +81,7 @@ def processed_file(filename):
 # Static route for processed images as a zip file
 @app.route('/download/processed.zip')
 def download_zip():
-    zip_filename = 'mapmorph generated textures.zip'
+    zip_filename = 'MyTextures.zip'
     zip_filepath = os.path.join(PROCESSED_FOLDER, zip_filename)
 
     # Remove pre-existing zip if exists
@@ -93,38 +100,134 @@ def download_zip():
 
 @app.route('/upload', methods=['POST'])
 def upload_image():
-    
     # Clear the uploads and processed folders before processing new images
     clear_folder(PROCESSED_FOLDER)
     clear_folder(UPLOAD_FOLDER)
-    
+
     if 'file' not in request.files:
         return jsonify({"error": "No file uploaded"}), 400
 
-    # Check if user is logged in
-    #username = request.headers.get('Username')
-    #user = User.query.filter_by(username=username).first() if username else None
-    #file_limit = 10 if user else 3  # Free users: 3 files, logged-in users: 10 files
-    
-    file_limit = 10 # Limit the number of files to 10 for now, implement login later
-
+    # Extract files and preferences from the request
     files = request.files.getlist('file')
-    if len(files) > file_limit:
-        return jsonify({"error": f"Maximum {file_limit} files allowed"}), 400
+    preferences = json.loads(request.form['preferences'])
+    
+    # Load PBR presets from the /presets directory
+    presets_directory = './presets'
+    presets = load_presets(presets_directory)
+
+    # Log preferences for debugging
+    print("User Preferences:", preferences)
 
     # Process files
     processed_files = []
-    for file in files:
+    for file in request.files.getlist('file'):
         filepath = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(filepath)
 
         try:
-            resize_and_crop(filepath)
-            # process_image is the master function that calls all other functions through image_processing.py
-            processed_img = process_image(filepath)
+            # Pre-process check, file size, file corruption, extension etc.
+            pre_process_check(filepath)
+            
+            #########################################################################
+            # Apply user preferences
+            #########################################################################
+   
+            # Target resolution, resize and crop the image
+            export_resolution = preferences.get('target_export_resolution', "512x512")
+            print("preferred export_resolution",export_resolution)
+            width, height = map(int, export_resolution.split('x'))
+            resize_and_crop(filepath, target_size=(width, height))
+
+            # base greyscale adjust
+            processed_image = greyscale_adjust(filepath)
+            
+            # Apply AI segmentation if selected
+            if preferences.get('use_ai_segmentation', False):
+                pass
+                print("AI segmentation feature is in development and will be implemented later.")
+                #processed_image = apply_segmentation(processed_image)
+
+            # Apply manual material selection if provided
+            manual_material = preferences.get('manual_material_selection', None)
+            if manual_material:
+                processed_image = detect_material(processed_image)
+            else:
+                print("Error, no material selected.")
+
+            # Apply AI upscaling if selected
+            if preferences.get('apply_ai_upscale', False):
+                pass
+                print("AI Upscaling feature is in development and will be implemented later.")
+                processed_image = apply_upscaling(processed_image)
+
+            # Standardize PBR if selected
+            if preferences.get('pbr_standardize', False):
+                # Apply user preferences PBR material preset to image given dropdown selection
+                material_preset_name = preferences.get('material_type', 'Brick')  # Default to brick material
+                material_preset = presets.get(material_preset_name, None)
+                processed_image = standardize_pbr(processed_image, material_preset)
+
+            # Set texel density if selected
+            if preferences.get('set_texel_ai', False):
+                pass
+                print("Set Texel Density feature is in development and will be implemented later.")
+                texel_value = preferences.get('texel_value', 1.0)
+                processed_image = set_texel_density(processed_image, texel_value)
+
+            # Apply post-processing workflow if provided
+            #workflow = preferences.get('workflow', None)
+            #if workflow:
+                #processed_image = apply_post_processing(processed_image, workflow)
+
+            # Generate normal/bump map
+            normal_bump = preferences.get('normal_bump', None)
+            if normal_bump:
+                pass
+                print("Nomral map generation feature is in development and will be implemented later.")
+                #processed_image = generate_normal_map(processed_image)
+
+            # Generate metallic map if selected
+            #generate_metallic = preferences.get('generate_metallic', None)
+            #if generate_metallic:
+                #print("This feature is in development and will be implemented later.")
+                #pass
+
+            # Add grunge if selected
+            if preferences.get('add_grunge', False):
+                print("Add grunge featur    e is in development and will be implemented later.")
+                pass
+                processed_image = add_grunge(processed_image)
+
+            # Remove artefacts if selected
+            if preferences.get('remove_artifacts', False):
+                print("Remove artefacts feature is in development and will be implemented later.")
+                pass
+                processed_image = remove_artifacts(processed_image)
+
+            # Make tilig material tiling if selected
+            if preferences.get('make_tiling', False):
+                print("Make tiling feature is in development and will be implemented later.")
+                pass
+                processed_image = make_tiling(processed_image)
+
+            # Force square if selected
+            if preferences.get('force_square', False):
+                print("Force square feature is in development and will be implemented later.")
+                pass
+                processed_image = force_square(processed_image)
+                
+            # export format setup, conversion logic goes here   
+            #if preferences.get('export_format')
+            
+            #########################################################################
+            # Applied user preferences
+            #########################################################################
+
+            # Process the image and save it to the processed folder
             processed_filepath = os.path.join(PROCESSED_FOLDER, file.filename)
-            cv2.imwrite(processed_filepath, processed_img)
+            cv2.imwrite(processed_filepath, processed_image)
             processed_files.append(file.filename)
+            
         except ValueError as e:
             return jsonify({"error": str(e)}), 400
 

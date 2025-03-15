@@ -115,3 +115,104 @@ body {
 .btn-primary:hover {
     background-color: #0b5ed7;
 }
+
+/* Dark overlay for readability */
+.overlay::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+/* Content box (Glassmorphism) */
+.content-box {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 90%;
+}
+
+/* Heading */
+h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 10px;
+}
+
+/* Subtext */
+p {
+    font-size: 1.2rem;
+    color: #f1f1f1;
+    margin-bottom: 30px;
+}
+
+/* Button styling */
+.btn {
+    margin: 10px;
+    padding: 12px 25px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-primary {
+    background: #007BFF;
+    color: white;
+    box-shadow: 0 3px 10px rgba(0, 123, 255, 0.3);
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+}
+
+.btn-secondary {
+    background: #28A745 !important;
+    color: white !important;
+    box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3) !important;
+}
+
+.btn-secondary:hover {
+    background: #1e7e34 !important;
+}
+
+/* Style for the image wrapper (keeps images & text together) */
+.image-wrapper {
+    display: inline-block;
+    text-align: center;
+    width: 120px; /* Consistent width for all thumbnails */
+    margin: 10px;
+    font-size: 12px;
+    color: #444;
+}
+
+/* Ensures the thumbnail frame is square */
+.thumbnail-container {
+    width: 100px;  /* Fixed width */
+    height: 100px; /* Fixed height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0; /* Light background for consistency */
+    overflow: hidden;
+    border-radius: 8px; /* Rounded corners */
+}
+
+/* Thumbnail images fill the space proportionally */
+.image-thumbnail {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Ensures entire image is visible */
+}
+
