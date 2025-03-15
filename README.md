@@ -1,21 +1,72 @@
 # MapMorph: AI-Powered PBR Texture Generation
 
-MapMorph is a web-based application designed to automate and streamline the generation of Physically Based Rendering (PBR) textures from real-world photos. It provides an intuitive, scalable, and accessible solution for 3D artists and game developers, enabling them to create high-quality textures with minimal effort.
+## Project Introduction
 
-Features
 
-- Automated Texture Generation: Convert images into roughness maps with a single click.
-- User-Friendly Interface: Intuitive and accessible for both beginners and professionals.
-- Scalable and Performant: Built with modern web technologies for fast and efficient processing.
-- AI-Powered Enhancements: Optional AI-based material segmentation for advanced workflows.
+
+In the world of computer graphics and game development, manually creating PBR (Physically Based Rendering) specular textures is a time-consuming and intricate process. This workflow often requires expensive software licenses and high-end hardware setups, making it difficult for smaller teams and independent artists, such as students or those with limited financial ability to access high-quality texture generation tools.
+
+![PBR Rendering Sample Image](https://learnopengl.com/img/pbr/ibl_specular_result_textured.png)
+
+MapMorph is an innovative web-based solution that automates the generation of PBR textures directly from real-world photos. This tool streamlines the texture creation process, removing common barriers such as:
+
+- The need for licensed software like Substance Painter
+- Expensive hardware requirements
+- Installation processes
+- Platform dependence
+
+By leveraging AI-powered enhancements and modern web technologies, MapMorph provides a fast, scalable, and accessible method for creating high-quality textures. It’s designed to make texture creation easier for 3D artists, game developers, and other professionals in the creative industries.
+
+## Key Features
+
+- Automated Texture Generation: Quickly convert real-world images into roughness, albedo, and normal maps with a single click.
+
+- PBR value standardizer: This unique feature of MapMorph will make sure all of your textures adhere to the Physically Based database preset of PBR values, ensuring all of your textures work in cohesion. You can even use custom presets for Unreal or Unity or even upload your own!
+
+- Support for multiple industry standard workflows: Roughness/Metallic and Specular/Glossiness workflows as well as Bump mapping are supported.
+
+- User-Friendly Interface: Intuitive and accessible for both beginners and seasoned professionals.
+
+- Scalable and Performant: Built using modern web technologies for fast, efficient processing, even with larger image files.
+
+- AI-Powered Enhancements: Optional AI-based material segmentation that intelligently analyzes images to provide advanced texture results.
+
+- Cross-Platform: No installation or hardware requirements. Works seamlessly across platforms using only a browser.
+
+## Demo
+
+You can explore a live demo of MapMorph on  [[http://mcp140.pythonanywhere.com](http://mcp140.pythonanywhere.com)] and see the texture generation process in action. The demo is hosted online, so no installation is required—simply upload your image, process it, and download the result.
+
+Check out a demo on YouTube!
+
+[![MapMorph Demo Video](https://img.youtube.com/vi/P6Kfp0JXXEU/0.jpg)](https://www.youtube.com/watch?v=P6Kfp0JXXEU)
+
+**Thanks for the thumbs up 😀👍**
+
+## Step-by-Step Usage
+
+### 1. Upload Your Image:
+Drag and drop or select an image from your computer to begin. Supported formats: JPG, PNG, and TIFF.
+
+### 2.Process the Image: 
+Once the image is uploaded, click the "Process" button to automatically generate PBR textures. The AI-powered backend will analyze the image and produce roughness, albedo, and normal maps.
+
+### 3.Download the Textures: 
+After processing, you can download the generated textures in either PNG or TGA format. Perfect for use in game engines like Unity, Unreal Engine, or 3D modeling software.
+     
+Example Output: After processing, MapMorph generates the following PBR texture maps:
+
+- Albedo Map (Diffuse)
+- Roughness Map
+- Normal Map
 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-### Prerequisites
+Again note that a live version on the website is available at [[http://mcp140.pythonanywhere.com](http://mcp140.pythonanywhere.com)]
 
-You can try out MapMorph without any installations using the live website: [[http://mcp140.pythonanywhere.com](http://mcp140.pythonanywhere.com)]
+### Prerequisites
 
 To run this project locally, you need the following installed on your machine:
 
@@ -25,33 +76,26 @@ To run this project locally, you need the following installed on your machine:
 
 Dependancies can be installed by running pip install requirements.txt
 
-- Flask (for the backend)
-
-- OpenCV (for image processing)
-
-- SQLite (for user authentication and preferences)
-
-
 # Installation and Running Instructions
 
 If you wish to deploy the web app locally on your machine, here is a step by step series of examples that tell you how to get a development env running in no time!
 
 ## 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/pbr-texture-generator.git
+git clone https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation.git
 ```
 
-## 2. Navigate to the backend folder
-```bash
-cd pbr-texture-generator/backend
-```
-
-## 3. Install dependencies
+## 2. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-## 4. Run the Flask app
+## 3. Navigate to the backend folder
+```bash
+cd pbr-texture-generator/backend
+```
+
+## 4. Run the Flask app on the local server 127.0.0.1:5000
 ```bash
 python app.py
 ```
@@ -59,64 +103,7 @@ python app.py
 ## 5. Access the application
 Open your browser and go to [http://127.0.0.1:5000](http://127.0.0.1:5000) to access the local build of the application.
 
-
-## Example Usage
-
-1. Upload Images: Drag and drop or select images to upload.
-
-2. Process Images: Click "Process" to generate PBR textures.
-
-3. Download Results: Download the processed textures in PNG or TGA format.
-
-End with an example of getting some data out of the system or using it for a little demo
-
-
-## Running the tests
-
-To run automated tests for this system, follow these steps:
-
-1. Navigate to the tests/ directory:
-```
-cd tests/
-```
-2. Run the test suite:
-```
-python -m unittest discover
-```
-
-### Break down into end to end tests
-
-These tests simulate user interactions with the application, such as uploading images, processing them, and downloading the results.
-
-```
-def test_image_upload(self):
-    response = self.client.post('/upload', data={'file': (io.BytesIO(b"test image data"), 'filename': 'test.jpg'})
-    self.assertEqual(response.status_code, 200)
-```
-
-### And coding style tests
-
-These tests ensure the code follows PEP 8 standards and other best practices.
-
-```
-flake8 .
-```
-
-## Deployment
-
-To deploy this project on a live system, follow these steps:
-
-1. Set up a production server (e.g., Heroku, AWS, or PythonAnywhere).
-
-2. Install dependencies:
-```
-pip install -r requirements.txt .
-```
-3. Run the Flask app:
-```
-python app.py
-```
-4. Configure environment variables (e.g., database credentials, API keys).
+At this point you may try out all the basic features with no restrictions! Awesome stuff.
 
 ## Built With
 
@@ -126,7 +113,16 @@ python app.py
 
 * Database: SQLite
 
-* Hosting: Heroku 
+* Hosting: Heroku
+
+## Roadmap
+
+### Future Features:
+- Support for additional texture maps (e.g., specular, metallic)
+- Enhanced AI segmentation for complex materials like fabric, wood, and metal
+- User authentication for saving custom textures and preferences
+- Integration with game engines for direct texture importing
+- API access for students and corporate plans custom to your business needs
 
 ## Contributing
 
@@ -140,9 +136,6 @@ We welcome contributions! Please read our Contributing Guidelines and Code of Co
 
 4. Submit a pull request with a detailed description of your changes.
 
-## Versioning
-
-N/A
 
 ## Authors
 
