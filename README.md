@@ -1,6 +1,6 @@
 # MapMorph: AI-Powered PBR Texture Generation
 
-## Project Introduction
+# Project Introduction
 
 
 
@@ -33,7 +33,7 @@ By leveraging AI-powered enhancements and modern web technologies, MapMorph prov
 
 - Cross-Platform: No installation or hardware requirements. Works seamlessly across platforms using only a browser.
 
-## Demo
+# Demo
 
 You can explore a live demo of MapMorph on  [[http://mcp140.pythonanywhere.com](http://mcp140.pythonanywhere.com)] and see the texture generation process in action. The demo is hosted online, so no installation is required—simply upload your image, process it, and download the result.
 
@@ -43,7 +43,7 @@ Check out a demo on YouTube!
 
 **Thanks for the thumbs up 😀👍**
 
-## Step-by-Step Usage
+# Step-by-Step Usage
 
 ### 1. Upload Your Image:
 Drag and drop or select an image from your computer to begin. Supported formats: JPG, PNG, and TIFF.
@@ -60,13 +60,13 @@ Example Output: After processing, MapMorph generates the following PBR texture m
 - Roughness Map
 - Normal Map
 
-## Getting Started
+# Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 Again note that a live version on the website is available at [[http://mcp140.pythonanywhere.com](http://mcp140.pythonanywhere.com)]
 
-### Prerequisites
+## Prerequisites
 
 To run this project locally, you need the following installed on your machine:
 
@@ -105,7 +105,7 @@ Open your browser and go to [http://127.0.0.1:5000](http://127.0.0.1:5000) to ac
 
 At this point you may try out all the basic features with no restrictions! Awesome stuff.
 
-## Built With
+# Built With
 
 *  Frontend: Vue.js, Bootstrap, Three.js
 
@@ -115,16 +115,16 @@ At this point you may try out all the basic features with no restrictions! Aweso
 
 * Hosting: Heroku
 
-## Roadmap
+# Roadmap
 
-### Future Features:
+## Future Features:
 - Support for additional texture maps (e.g., specular, metallic)
 - Enhanced AI segmentation for complex materials like fabric, wood, and metal
 - User authentication for saving custom textures and preferences
 - Integration with game engines for direct texture importing
 - API access for students and corporate plans custom to your business needs
 
-## Contributing
+# Contributing
 
 We welcome contributions! Please read our Contributing Guidelines and Code of Conduct before getting started.
 
@@ -136,18 +136,17 @@ We welcome contributions! Please read our Contributing Guidelines and Code of Co
 
 4. Submit a pull request with a detailed description of your changes.
 
-
-## Authors
+# Authors
 
 * **MetePolat825** - *Initial work* - [MetePolat825](https://github.com/MetePolat825)
 
 See also the list of [contributors](https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation/contributors) who participated in this project.
 
-## License
+# License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
+# Acknowledgments
 
 * OpenCV for image processing.
 
