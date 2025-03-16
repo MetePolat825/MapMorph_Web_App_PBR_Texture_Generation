@@ -202,8 +202,8 @@ def standardize_pbr(image_path, material_preset = None):
         # If a material preset is provided through the user interface, adjust roughness accordingly
     if material_preset:
         roughness_value = material_preset.get('Roughness', 50)  # Default to 50 if not provided
-        img_grey_shifted = apply_roughness_to_image(img_grey_shifted, roughness_value)
-    return image_path
+        img_grey_shifted = apply_roughness_to_image(image_path, roughness_value)
+    return img_grey_shifted
 
 def set_texel_density(image_path):
     """

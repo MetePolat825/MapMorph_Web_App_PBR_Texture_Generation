@@ -1,7 +1,8 @@
 Flask==3.1.0
 Flask-Cors==3.0.10
-Pillow==9.2.0
-numpy==1.23.1
+Pillow==11.1.0
+numpy==2.2.3
 scipy==1.9.0
-opencv-python==4.6.0.66
+opencv-python==4.11.0
 pytest==7.4.4
+six = 1.17.0
