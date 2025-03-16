@@ -36,10 +36,8 @@ jobs:
     - name: Lint with flake8
       run: |
         source venv/bin/activate
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        flake8 --exclude=my-venv --ignore=E501 --count --show-source --statistics    # exclude virtual environment packages from linting and ignore line too long error E501
 
-          
     - name: Run Tests 
       run: |
         source venv/bin/activate
