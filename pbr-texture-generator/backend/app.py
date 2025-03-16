@@ -2,17 +2,16 @@ import os
 import zipfile
 import shutil
 import json  # For saving presets
-from datetime import datetime, timedelta # for token reset logic
 
 import cv2
 
-from flask import Flask, request, jsonify, send_file, render_template, send_from_directory, redirect, request, flash, session, url_for
+from flask import Flask, request, jsonify, send_file, render_template, send_from_directory
 
-from src.image_processing import load_presets,greyscale_adjust, resize_and_crop,apply_segmentation, detect_material, apply_upscaling, standardize_pbr, set_texel_density, pre_process_check, generate_normal_map, force_square, add_grunge, remove_artifacts,make_tiling,generate_metallic
+from src.image_processing import load_presets, greyscale_adjust, resize_and_crop, detect_material, apply_upscaling, standardize_pbr, set_texel_density, pre_process_check, force_square, add_grunge, remove_artifacts, make_tiling
 
 # initialize flask app from current file
 app = Flask(__name__)
-#app.config['SECRET_KEY'] = '0123456789'
+# app.config['SECRET_KEY'] = '0123456789'
 
 ##################################################################
 # Image processing routes
@@ -27,15 +26,16 @@ if not os.path.exists(UPLOAD_FOLDER):
 if not os.path.exists(PROCESSED_FOLDER):
     os.makedirs(PROCESSED_FOLDER)
 
+
 # Clear the uploads and processed folders on startup to avoid duplication from previous runs.
 def clear_folder(folder):
     for filename in os.listdir(folder):
         file_path = os.path.join(folder, filename)
         try:
-            if os.path.isdir(file_path): # if item is a directory, remove it and its contents
+            if os.path.isdir(file_path):  # if item is a directory, remove it and its contents
                 shutil.rmtree(file_path)
             else:
-                os.unlink(file_path) # if item is a file, remove it
+                os.unlink(file_path)  # if item is a file, remove it
         except Exception as e:
             print(f'Failed to delete {file_path}. Reason: {e}')
 
@@ -44,39 +44,47 @@ def clear_folder(folder):
 # The routes are defined in the following order:
 ##################################################################
 
+
 # Serve the index.html file
 @app.route('/')
 def home():
     return render_template('index.html')
+
 
 # Route for the processing page
 @app.route('/processing')
 def processing():
     return render_template('processing.html')
 
+
 # Route for the login/signup page
 @app.route('/auth')
 def auth():
     return render_template("auth.html")
+
 
 # Route for the help page
 @app.route('/help')
 def help():
     return render_template('help.html')
 
+
 # Route for the pricing page
 @app.route('/pricing')
 def pricing():
     return render_template('pricing.html')
+
 
 # Route for the bug report page
 @app.route('/bug_report')
 def bug_report():
     return render_template('bug_report.html')
 
+
 @app.route('/processed/<filename>')
 def processed_file(filename):
     return send_from_directory(PROCESSED_FOLDER, filename)
+
 
 # Static route for processed images as a zip file
 @app.route('/download/processed.zip')
@@ -98,6 +106,7 @@ def download_zip():
     # Send the zip file to the user's download folder
     return send_file(zip_filepath, as_attachment=True)
 
+
 @app.route('/upload', methods=['POST'])
 def upload_image():
     # Clear the uploads and processed folders before processing new images
@@ -108,9 +117,9 @@ def upload_image():
         return jsonify({"error": "No file uploaded"}), 400
 
     # Extract files and preferences from the request
-    files = request.files.getlist('file')
+    # files = request.files.getlist('file')
     preferences = json.loads(request.form['preferences'])
-    
+
     # Load PBR presets from the /presets directory
     presets_directory = './presets'
     presets = load_presets(presets_directory)
@@ -127,25 +136,25 @@ def upload_image():
         try:
             # Pre-process check, file size, file corruption, extension etc.
             pre_process_check(filepath)
-            
+
             #########################################################################
             # Apply user preferences
             #########################################################################
-   
+
             # Target resolution, resize and crop the image
             export_resolution = preferences.get('target_export_resolution', "512x512")
-            print("preferred export_resolution",export_resolution)
+            print("preferred export_resolution", export_resolution)
             width, height = map(int, export_resolution.split('x'))
             resize_and_crop(filepath, target_size=(width, height))
 
             # base greyscale adjust
             processed_image = greyscale_adjust(filepath)
-            
+
             # Apply AI segmentation if selected
             if preferences.get('use_ai_segmentation', False):
                 pass
                 print("AI segmentation feature is in development and will be implemented later.")
-                #processed_image = apply_segmentation(processed_image)
+                # processed_image = apply_segmentation(processed_image)
 
             # Apply manual material selection if provided
             manual_material = preferences.get('manual_material_selection', None)
@@ -175,22 +184,22 @@ def upload_image():
                 processed_image = set_texel_density(processed_image, texel_value)
 
             # Apply post-processing workflow if provided
-            #workflow = preferences.get('workflow', None)
-            #if workflow:
-                #processed_image = apply_post_processing(processed_image, workflow)
+            # workflow = preferences.get('workflow', None)
+            # if workflow:
+                # processed_image = apply_post_processing(processed_image, workflow)
 
             # Generate normal/bump map
             normal_bump = preferences.get('normal_bump', None)
             if normal_bump:
                 pass
                 print("Nomral map generation feature is in development and will be implemented later.")
-                #processed_image = generate_normal_map(processed_image)
+                # processed_image = generate_normal_map(processed_image)
 
             # Generate metallic map if selected
-            #generate_metallic = preferences.get('generate_metallic', None)
-            #if generate_metallic:
-                #print("This feature is in development and will be implemented later.")
-                #pass
+            # generate_metallic = preferences.get('generate_metallic', None)
+            # if generate_metallic:
+                # print("This feature is in development and will be implemented later.")
+                # pass
 
             # Add grunge if selected
             if preferences.get('add_grunge', False):
@@ -215,10 +224,10 @@ def upload_image():
                 print("Force square feature is in development and will be implemented later.")
                 pass
                 processed_image = force_square(processed_image)
-                
-            # export format setup, conversion logic goes here   
-            #if preferences.get('export_format')
-            
+
+            # export format setup, conversion logic goes here
+            # if preferences.get('export_format')
+
             #########################################################################
             # Applied user preferences
             #########################################################################
@@ -227,11 +236,12 @@ def upload_image():
             processed_filepath = os.path.join(PROCESSED_FOLDER, file.filename)
             cv2.imwrite(processed_filepath, processed_image)
             processed_files.append(file.filename)
-            
+
         except ValueError as e:
             return jsonify({"error": str(e)}), 400
 
     return jsonify({"message": "Images processed", "files": processed_files})
+
 
 if __name__ == '__main__':
     app.run(debug=True)

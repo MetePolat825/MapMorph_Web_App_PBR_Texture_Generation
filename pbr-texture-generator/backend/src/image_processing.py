@@ -4,6 +4,7 @@ import numpy as np
 from PIL import Image
 import csv
 
+
 def pre_process_check(filepath):
     """
     Perform pre-processing checks on the given image file.
@@ -17,7 +18,7 @@ def pre_process_check(filepath):
     Raises:
     ValueError: If any of the checks fail, a ValueError is raised with an appropriate error message.
     """
-    
+
     # Check file extension
     valid_extensions = ('.png', '.jpg', '.jpeg', '.tga')
     if not filepath.lower().endswith(valid_extensions):
@@ -37,7 +38,7 @@ def pre_process_check(filepath):
     height, width = image.shape[:2]
     if height < 256 or width < 256:
         raise ValueError("Image dimensions are too small. Minimum size is 256x256 pixels.")
-    
+
     try:
         img = Image.open(filepath)
         img.verify()  # Verify if the image is corrupted
@@ -45,12 +46,12 @@ def pre_process_check(filepath):
         raise ValueError(f"Image is corrupted: {e}")
 
     # Additional checks can be added here
-    
-    
+
+
 def load_presets(presets_directory):
     """
     Load all preset CSV files from the specified directory.
-    
+
     Parameters:
         presets_directory (str): Directory containing preset CSV files.
 
@@ -58,7 +59,7 @@ def load_presets(presets_directory):
         presets (dict): A dictionary of materials with their properties.
     """
     presets = {}
-    
+
     # Loop through all CSV files in the /presets directory
     for filename in os.listdir(presets_directory):
         if filename.endswith('.csv'):
@@ -78,10 +79,11 @@ def load_presets(presets_directory):
 
     return presets
 
-def greyscale_adjust(input_filepath, intensity_factor=1, grey_factor=0.5,material_preset=None):
+
+def greyscale_adjust(input_filepath, intensity_factor=1, grey_factor=0.5, material_preset=None):
     """
     Main process fucntion, process an image by normalizing it to grayscale and adjusting its intensity towards 50% greyscale.
-    
+
     Parameters:
         input_filepath (str): Path to the uploaded image file.
         intensity_factor (float): Factor by which the intensity will be adjusted.
@@ -98,26 +100,25 @@ def greyscale_adjust(input_filepath, intensity_factor=1, grey_factor=0.5,materia
 
     # Normalize the image
     img_normalized = cv2.normalize(img, None, 0, 255, cv2.NORM_MINMAX)
-    
+
     # Adjust intensity by multiplying with intensity_factor
     img_normalized = cv2.convertScaleAbs(img_normalized * intensity_factor)
-    
+
     # Shift towards 50% greyscale
     img_grey_shifted = cv2.addWeighted(img_normalized, 1 - grey_factor, np.full_like(img_normalized, 128), grey_factor, 0)
-    
-    # for each run of the image processing pipeline, check the user preferences and apply the selected filters    
-    
 
+    # for each run of the image processing pipeline, check the user preferences and apply the selected filters
     return img_grey_shifted
+
 
 def apply_roughness_to_image(image, roughness):
     """
     Apply roughness to the image by adjusting the intensity.
-    
+
     Parameters:
         image (numpy.ndarray): The input image to adjust.
         roughness (int): The roughness value (0 to 100).
-    
+
     Returns:
         adjusted_image (numpy.ndarray): The image with roughness applied.
     """
@@ -127,14 +128,15 @@ def apply_roughness_to_image(image, roughness):
     adjusted_image = cv2.convertScaleAbs(image * roughness_factor)
     return adjusted_image
 
+
 def resize_and_crop(image_path, target_size=(512, 512)):
     with Image.open(image_path) as img:
-        
-        #print("in func target size", target_size)
-        
+
+        # print("in func target size", target_size)
+
         img = img.convert("RGB")
         width, height = img.size
-        
+
         left = (width - target_size[0]) / 2
         top = (height - target_size[1]) / 2
         right = (width + target_size[0]) / 2
@@ -142,34 +144,37 @@ def resize_and_crop(image_path, target_size=(512, 512)):
 
         img = img.crop((left, top, right, bottom))
         img.save(image_path)
-        
+
+
 def generate_roughness_map(image_path):
     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if img is None:
         raise ValueError(f"Image at {image_path} could not be read.")
-    
+
     # Apply edge detection (e.g., Sobel or Canny)
     edges = cv2.Canny(img, 100, 200)
-    
+
     # Normalize and adjust intensity
     roughness_map = cv2.normalize(edges, None, 0, 255, cv2.NORM_MINMAX)
     roughness_map = cv2.convertScaleAbs(roughness_map * 2.0)  # Adjust intensity
-    
+
     return roughness_map
+
 
 def generate_normal_map(image_path):
     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if img is None:
         raise ValueError(f"Image at {image_path} could not be read.")
-    
+
     # Generate normal map using Sobel derivatives
     sobel_x = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=5)
     sobel_y = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize=5)
-    
+
     normal_map = np.dstack((sobel_x, sobel_y, np.ones_like(img)))
     normal_map = cv2.normalize(normal_map, None, 0, 255, cv2.NORM_MINMAX)
-    
+
     return normal_map
+
 
 def apply_segmentation(image_path):
     """
@@ -179,13 +184,15 @@ def apply_segmentation(image_path):
     print("Applying segmentation...")
     return image_path
 
+
 def detect_material(image_path):
     """
     Detect material using AI or manual selection.
     """
     # Use manually selected material
-    #print(f"Using material: {image_path}")
+    # print(f"Using material: {image_path}")
     return image_path
+
 
 def apply_upscaling(image_path):
     """
@@ -195,21 +202,24 @@ def apply_upscaling(image_path):
     print("Applying AI upscaling...")
     return image_path
 
-def standardize_pbr(image_path, material_preset = None):
+
+def standardize_pbr(image_path, material_preset=None):
     """
     Standardize PBR values based on the selected preset.
     """
-        # If a material preset is provided through the user interface, adjust roughness accordingly
+    # If a material preset is provided through the user interface, adjust roughness accordingly
     if material_preset:
         roughness_value = material_preset.get('Roughness', 50)  # Default to 50 if not provided
         img_grey_shifted = apply_roughness_to_image(image_path, roughness_value)
     return img_grey_shifted
+
 
 def set_texel_density(image_path):
     """
     Set texel density using AI.
     """
     return image_path
+
 
 def add_grunge(image_path):
     """
@@ -220,6 +230,7 @@ def add_grunge(image_path):
     process_image = image_path
     return process_image
 
+
 def remove_artifacts(image_path):
     """
     Remove small artefacts by using AI and smoothing.
@@ -228,6 +239,7 @@ def remove_artifacts(image_path):
     pass
     process_image = image_path
     return process_image
+
 
 def make_tiling(image_path):
     """
@@ -238,6 +250,7 @@ def make_tiling(image_path):
     process_image = image_path
     return process_image
 
+
 def force_square(image_path):
     """
     Force resolution to square.
@@ -247,10 +260,10 @@ def force_square(image_path):
     process_image = image_path
     return process_image
 
+
 def generate_metallic(image_path):
     """
     Generate a basic metallic map for the image.
     """
     process_image = image_path
     return process_image
-

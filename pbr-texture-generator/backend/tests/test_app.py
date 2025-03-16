@@ -6,11 +6,13 @@ from flask import Flask, jsonify
 # Dummy Flask app
 app = Flask(__name__)
 
+
 # Dummy route for testing
 @app.route('/upload', methods=['POST'])
 def upload_image():
     # This is just a dummy route that will always return a 200 status
     return jsonify({"message": "Images processed", "files": ["test_image.jpg"]}), 200
+
 
 # Create a test client fixture
 @pytest.fixture
@@ -18,13 +20,14 @@ def client():
     with app.test_client() as client:
         yield client
 
+
 # Dummy test to ensure everything works
 def test_upload_image(client):
     # Prepare a dummy image
     image_data = BytesIO(b"Fake image content for testing")
     image_data.filename = "test_image.jpg"  # Set the filename attribute
 
-    # Prepare mock preferences (as you use it in the upload route)      
+    # Prepare mock preferences (as you use it in the upload route)
     preferences = {
         "target_export_resolution": "512x512",
         "use_ai_segmentation": False,
