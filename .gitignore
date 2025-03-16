@@ -178,3 +178,6 @@ cython_debug/
 *.webp
 *.gif
 pbr-texture-generator/backend/my-venv/
+pbr-texture-generator/backend/src/TEMP_test_normal.py
+pbr-texture-generator/backend/src/TEMP_test_tiling.py
+*.zip

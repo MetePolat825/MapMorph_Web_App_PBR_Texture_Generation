@@ -1,22 +1,15 @@
 import os
 import zipfile
 import shutil
-import json  # For saving presets
+import json
 
 import cv2
 
 from flask import Flask, request, jsonify, send_file, render_template, send_from_directory
 
-from src.image_processing import load_presets, greyscale_adjust, resize_and_crop, detect_material, apply_upscaling, standardize_pbr, set_texel_density, pre_process_check, force_square, add_grunge, remove_artifacts, make_tiling
+from src.image_processing import load_presets, greyscale_adjust, resize_and_crop, detect_material, apply_upscaling, standardize_pbr, set_texel_density, pre_process_check, force_square, add_grunge, remove_artifacts, make_tiling, convert_image, generate_metallic, generate_normal_map
 
-# initialize flask app from current file
 app = Flask(__name__)
-# app.config['SECRET_KEY'] = '0123456789'
-
-##################################################################
-# Image processing routes
-# The following routes are used to process images uploaded by the user.
-##################################################################
 
 # create a folder for uploads and processed images
 UPLOAD_FOLDER = 'uploads'
@@ -28,7 +21,7 @@ if not os.path.exists(PROCESSED_FOLDER):
 
 
 # Clear the uploads and processed folders on startup to avoid duplication from previous runs.
-def clear_folder(folder):
+def clear_folder(folder: str) -> None:
     for filename in os.listdir(folder):
         file_path = os.path.join(folder, filename)
         try:
@@ -121,15 +114,26 @@ def upload_image():
     preferences = json.loads(request.form['preferences'])
 
     # Load PBR presets from the /presets directory
-    presets_directory = './presets'
-    presets = load_presets(presets_directory)
+    pbr_presets_directory = './presets'
+    pbr_presets = load_presets(pbr_presets_directory)
+    
+    naming_convention = preferences.get("naming_convention","Don't Convert")
+    if naming_convention == "Don't Convert":
+        naming_convention = ""
+    
+    desired_extension = preferences.get("export_format","Don't Convert")
+        
+    print("Desired extension:", desired_extension)
 
     # Log preferences for debugging
     print("User Preferences:", preferences)
 
-    # Process files
     processed_files = []
     for file in request.files.getlist('file'):
+        
+        if desired_extension == "Don't Convert":
+            desired_extension = file.filename.split('.')[-1]  # Default to the original file extension
+        
         filepath = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(filepath)
 
@@ -141,14 +145,14 @@ def upload_image():
             # Apply user preferences
             #########################################################################
 
-            # Target resolution, resize and crop the image
+            # Target resolution, resize the image to fit the new size
             export_resolution = preferences.get('target_export_resolution', "512x512")
-            print("preferred export_resolution", export_resolution)
+            print("preferred export_resolution:", export_resolution)
             width, height = map(int, export_resolution.split('x'))
-            resize_and_crop(filepath, target_size=(width, height))
+            resized_cropped_image = resize_and_crop(filepath, target_size=(width, height))
 
-            # base greyscale adjust
-            processed_image = greyscale_adjust(filepath)
+            # base greyscale adjust. change this to work on top of resize, not replace!
+            processed_image = greyscale_adjust(resized_cropped_image)
 
             # Apply AI segmentation if selected
             if preferences.get('use_ai_segmentation', False):
@@ -173,7 +177,7 @@ def upload_image():
             if preferences.get('pbr_standardize', False):
                 # Apply user preferences PBR material preset to image given dropdown selection
                 material_preset_name = preferences.get('material_type', 'Brick')  # Default to brick material
-                material_preset = presets.get(material_preset_name, None)
+                material_preset = pbr_presets.get(material_preset_name, None)
                 processed_image = standardize_pbr(processed_image, material_preset)
 
             # Set texel density if selected
@@ -187,19 +191,6 @@ def upload_image():
             # workflow = preferences.get('workflow', None)
             # if workflow:
                 # processed_image = apply_post_processing(processed_image, workflow)
-
-            # Generate normal/bump map
-            normal_bump = preferences.get('normal_bump', None)
-            if normal_bump:
-                pass
-                print("Nomral map generation feature is in development and will be implemented later.")
-                # processed_image = generate_normal_map(processed_image)
-
-            # Generate metallic map if selected
-            # generate_metallic = preferences.get('generate_metallic', None)
-            # if generate_metallic:
-                # print("This feature is in development and will be implemented later.")
-                # pass
 
             # Add grunge if selected
             if preferences.get('add_grunge', False):
@@ -215,31 +206,102 @@ def upload_image():
 
             # Make tilig material tiling if selected
             if preferences.get('make_tiling', False):
-                print("Make tiling feature is in development and will be implemented later.")
-                pass
                 processed_image = make_tiling(processed_image)
+                print("Made tiling image.")
 
             # Force square if selected
             if preferences.get('force_square', False):
                 print("Force square feature is in development and will be implemented later.")
                 pass
                 processed_image = force_square(processed_image)
+                
+            #########################################################################
+            # Output Maps
+            #########################################################################
 
+            # Generate roughness map if selected
+            if preferences.get('generate_roughness', None):
+                specular_workflow_preference = preferences.get('specular_workflow', "PBR Rough/Metallic Workflow")
+                if specular_workflow_preference == "PBR Rough/Metallic Workflow":
+                    print("Using PBR Rough/Metallic Workflow")
+                else:
+                    print("Using Specular/Glossiness Workflow")
+                
+            # Generate metallic map if selected
+            if preferences.get('generate_metallic', None):
+                
+                material_preset_name = preferences.get('manual_material_selection', 'Brick')
+                material_preset = pbr_presets.get(material_preset_name, {})
+
+                metallic_value = material_preset.get('IsMetallic', 0)  # Default to not metallic if not specified
+                
+                print("Material preset:", material_preset_name, "IsMetallic:", metallic_value)
+
+                metallic_map = generate_metallic(processed_image,metallic_value)
+                
+                if naming_convention == "Don't Convert":
+                    metallic_filename = os.path.splitext(file.filename)[0] + "_Metallic." + desired_extension
+                elif naming_convention == "T_texturename_Roughness":
+                    metallic_filename = "T_" + os.path.splitext(file.filename)[0] + "_Metallic." + desired_extension
+                elif naming_convention == "T_texturename_R":
+                    metallic_filename = "T_" + os.path.splitext(file.filename)[0] + "_M." + desired_extension
+                
+                # Export the metallic map
+                metallic_filepath = os.path.join(PROCESSED_FOLDER, metallic_filename)
+                cv2.imwrite(metallic_filepath, metallic_map)
+                print("Metallic map saved as", metallic_filename)
+                processed_files.append(metallic_filename)  # add here for frontend visualization
+
+            # Generate normal map if selected
+            if preferences.get('generate_normal', None):
+                
+                normal_preset_name = preferences.get('normal_bump_workflow', 'Normal Map')
+                
+                print("Selected normal map preset:", normal_preset_name)
+
+                normal_map = generate_normal_map(resized_cropped_image, normal_preset_name)
+                
+                if naming_convention == "Don't Convert":
+                    normal_filename = os.path.splitext(file.filename)[0] + "_Normal." + desired_extension
+                elif naming_convention == "T_texturename_Roughness":
+                    normal_filename = "T_" + os.path.splitext(file.filename)[0] + "_Normal." + desired_extension
+                elif naming_convention == "T_texturename_R":
+                    normal_filename = "T_" + os.path.splitext(file.filename)[0] + "_N." + desired_extension
+                
+                # Export the Normal/Bump map
+                normal_filepath = os.path.join(PROCESSED_FOLDER, normal_filename)
+                cv2.imwrite(normal_filepath, normal_map)
+                print("Normal map saved as", normal_filename)
+                processed_files.append(normal_filename)  # add here for frontend visualization
+                
             # export format setup, conversion logic goes here
-            # if preferences.get('export_format')
+            export_preference = preferences.get('export_format', "Don't Convert")
+
+            print("Exporting image as", export_preference)
+            if not export_preference == "Don't Convert":
+                processed_image = convert_image(processed_image, export_preference)
+            
+            if naming_convention == "Don't Convert":
+                processed_filename = os.path.splitext(file.filename)[0] + "_Roughness." + desired_extension
+            elif naming_convention == "T_texturename_Roughness":
+                processed_filename = "T_" + os.path.splitext(file.filename)[0] + "_Roughness." + desired_extension
+            elif naming_convention == "T_texturename_R":
+                processed_filename = "T_" + os.path.splitext(file.filename)[0] + "_R." + desired_extension
+                
+            print("Processed roughness texture saved as", processed_filename)
 
             #########################################################################
             # Applied user preferences
             #########################################################################
 
             # Process the image and save it to the processed folder
-            processed_filepath = os.path.join(PROCESSED_FOLDER, file.filename)
+            processed_filepath = os.path.join(PROCESSED_FOLDER, processed_filename)
             cv2.imwrite(processed_filepath, processed_image)
-            processed_files.append(file.filename)
+            processed_files.append(processed_filename)
 
         except ValueError as e:
-            return jsonify({"error": str(e)}), 400
-
+            return jsonify({"Error during main processing loop:": str(e)}), 400
+        
     return jsonify({"message": "Images processed", "files": processed_files})
 
 

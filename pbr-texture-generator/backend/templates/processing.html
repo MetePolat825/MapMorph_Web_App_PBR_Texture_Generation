@@ -33,18 +33,29 @@
             <legend class="w-auto">Export Options</legend>
         
             <!-- Export Settings -->
+
+            <div class="mb-3">
+                <label for="naming-convention" class="form-label">Desired Naming Convention</label>
+                <select class="form-select" id="naming-convention">
+                    <option selected>Don't Convert</option>
+                    <option>T_texturename_Roughness </option>
+                    <option>T_texturename_R</option>
+                </select>
+            </div>
+
+
             <div class="mb-3">
                 <label for="export-format" class="form-label">Desired Export Format</label>
                 <select class="form-select" id="export-format">
-                    <option>Don't Convert</option>
+                    <option selected>Don't Convert</option>
                     <option>PNG</option>
                     <option>JPG</option>
-                    <option>TGA</option>
+                    <option>BMP</option>
                 </select>
             </div>
             
             <div class="mb-3">
-                <label for="export-resolution" class="form-label">Target Export Resolution, Resize via Crop by Default</label>
+                <label for="export-resolution" class="form-label">Target Export Resolution</label>
                 <select class="form-select" id="export-resolution">
                     <option>256x256</option>
                     <option selected>512x512</option>
@@ -73,13 +84,17 @@
             <div class="mb-3">
                 <label for="material-selection" class="form-label">Manual Material Selection</label>
                 <select class="form-select" id="material-selection">
-                    <option>Brick</option>
-                    <option>Metal</option>
-                    <option>Wood</option>
-                    <option>Dirt</option>
-                    <option>Glass</option>
-                    <option>Stone</option>
+                    <option>Aluminum</option>
+                    <option>Copper</option>
+                    <option>Gold</option>
+                    <option>Iron</option>
                     <option>Plastic</option>
+                    <option>Rubber</option>
+                    <option>Plastic</option>
+                    <option>Wood</option>
+                    <option>Glass</option>
+                    <option>Concrete</option>
+                    <option>Brick</option>
                 </select>
             </div>
 
@@ -88,8 +103,8 @@
         <fieldset class="border p-3 mb-3">
             <legend class="w-auto">Additional Processing</legend>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="remove-tiling">
-                <label class="form-check-label" for="remove-tiling">Remove Image Tiling (Make Seamless)</label>
+                <input class="form-check-input" type="checkbox" id="make-tiling">
+                <label class="form-check-label" for="make-tiling">Remove Image Tiling (Make Seamless)</label>
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="force-square">
@@ -97,20 +112,34 @@
             </div>
         </fieldset>
 
-        
-
         <fieldset class="border p-3 mb-3">
             <legend class="w-auto">Output Maps</legend>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="generate-roughness" checked>
+                <label class="form-check-label" for="generate-roughness">Generate Roughness/Specular Map</label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="generate-metallic" checked>
+                <label class="form-check-label" for="generate-metallic">Generate Metallic/Glossiness Map</label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="generate-normal" checked>
+                <label class="form-check-label" for="generate-normal">Generate Normal/Bump Map</label>
+            </div>
+
             <div class="mb-3">
-                <label for="workflow" class="form-label">Workflow</label>
-                <select class="form-select" id="workflow">
-                    <option>PBR Spec/Gloss Workflow</option>
+                <label for="specular-workflow" class="form-label">Workflow Selection</label>
+                <select class="form-select" id="specular-workflow">
                     <option>PBR Rough/Metallic Workflow</option>
+                    <option>PBR Spec/Gloss Workflow</option>
                 </select>
             </div>
             <div class="mb-3">
-                <label for="normal-bump" class="form-label">Normal or Bump Map</label>
-                <select class="form-select" id="normal-bump">
+                <label for="normal-bump-workflow" class="form-label">Normal or Bump Map</label>
+                <select class="form-select" id="normal-bump-workflow">
                     <option>Normal Map</option>
                     <option>Bump Map</option>
                 </select>
@@ -265,6 +294,7 @@
 
         // Collect preferences data
         const preferences = {
+            naming_convention: document.getElementById('naming-convention').value,
             use_ai_segmentation: document.getElementById('segmentation').checked,
             manual_material_selection: document.getElementById('material-selection').value,
             export_format: document.getElementById('export-format').value,
@@ -274,12 +304,16 @@
             pbr_preset: document.getElementById('pbr-preset').value,
             set_texel_ai: document.getElementById('set-texel-ai').checked,
             texel_value: document.getElementById('texel-value').value,
-            workflow: document.getElementById('workflow').value,
-            normal_bump: document.getElementById('normal-bump').value,
+            specular_workflow: document.getElementById('specular-workflow').value,
+            normal_bump_workflow: document.getElementById('normal-bump-workflow').value,
             add_grunge: document.getElementById('add-grunge').checked,
             remove_artifacts: document.getElementById('remove-artifacts').checked,
-            remove_tiling: document.getElementById('remove-tiling').checked,
+            make_tiling: document.getElementById('make-tiling').checked,
             force_square: document.getElementById('force-square').checked,
+            // select output maps
+            generate_roughness: document.getElementById('generate-roughness').checked,
+            generate_metallic: document.getElementById('generate-metallic').checked,
+            generate_normal: document.getElementById('generate-normal').checked,
         };
 
         for (let i = 0; i < files.length; i++) {
