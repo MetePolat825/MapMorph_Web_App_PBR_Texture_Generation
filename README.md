@@ -35,7 +35,7 @@ By leveraging AI-powered enhancements and modern web technologies, MapMorph prov
 
 # Demo
 
-You can explore a live demo of MapMorph on  [[http://mcp140.pythonanywhere.com](http://mcp140.pythonanywhere.com)] and see the texture generation process in action. The demo is hosted online, so no installation is required—simply upload your image, process it, and download the result.
+You can explore a live demo of MapMorph on  [the live website](https://mapmorph-mcp140.pythonanywhere.com) and see the texture generation process in action. The demo is hosted online, so no installation is required—simply upload your image, process it, and download the result.
 
 Check out a demo on YouTube!
 
@@ -64,7 +64,7 @@ Example Output: After processing, MapMorph generates the following PBR texture m
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-Again note that a live version on the website is available at [[http://mcp140.pythonanywhere.com](http://mcp140.pythonanywhere.com)]
+Again note that a live version on the website is available at [the live website](https://mapmorph-mcp140.pythonanywhere.com).
 
 ## Prerequisites
 
@@ -148,7 +148,7 @@ The CI/CD pipeline is defined in the `.github/workflows/ci.yml` file. The pipeli
 
 ### PythonAnywhere Deployment
 
-The project is hosted on **PythonAnywhere**, which provides a cloud-based platform for Python applications. After the GitHub Actions workflow completes, the application is automatically deployed to PythonAnywhere using the provided deployment scripts. The app can be accessed from [PythonAnywhere](https://mcp140.pythonanywhere.com/).
+The project is hosted on **PythonAnywhere**, which provides a cloud-based platform for Python applications. After the GitHub Actions workflow completes, the application is automatically deployed to PythonAnywhere using the provided deployment scripts. The app can be accessed from [PythonAnywhere](https://mapmorph-mcp140.pythonanywhere.com).
 
 For more details on setting up the GitHub Actions workflow and deploying to PythonAnywhere, check out the following documentation:
 
