@@ -10,4 +10,4 @@ jobs:
     steps:
       - name: Ping website
         run: |
-          curl -s -o /dev/null -w "%{http_code}" http://mcp140.pythonanywhere.com
+          curl -s -o /dev/null -w "%{http_code}" https://mapmorph-mcp140.pythonanywhere.com/
