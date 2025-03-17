@@ -223,7 +223,7 @@ def detect_material(image: np.ndarray) -> np.ndarray:
     # Use manually selected material
     detected_material_image = image
     
-    return image
+    return detected_material_image
 
 
 def apply_upscaling(image: np.ndarray) -> np.ndarray:

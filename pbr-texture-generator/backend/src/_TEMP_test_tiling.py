@@ -18,4 +18,3 @@ if height % 2 != 0 or width % 2 != 0:
 processed_image = make_tiling(image)
 
 cv2.imwrite(output_image, cv2.cvtColor(processed_image, cv2.COLOR_RGB2BGR))
-
