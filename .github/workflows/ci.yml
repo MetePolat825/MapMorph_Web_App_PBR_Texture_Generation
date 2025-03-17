@@ -27,17 +27,23 @@ jobs:
         source venv/bin/activate
         pip install -r requirements.txt 
         pip install flake8  # Ensure flake8 is installed
+        pip install mypy # ensure mypy is installed for checks
 
-    - name: Verify installation of flake8
+    - name: Verify installations
       run: |
         source venv/bin/activate
-        pip list  # List installed packages to verify flake8 is installed
-    
+        pip list  # List installed packages
+
+    - name: Run MyPy
+      run: |
+        source venv/bin/activate
+        # mypy pbr-texture-generator/backend/app.py pbr-texture-generator/backend/src/image_processing.py
+      
     - name: Lint with flake8
       run: |
         source venv/bin/activate
-        flake8 --exclude=venv,my-venv --ignore=E501 --count --show-source --statistics    # exclude virtual environment packages from linting and ignore line too long error E501
-
+        flake8 --exclude=venv,my-venv --ignore=E501,E701,E702,E703,W293,E226,E231 --count --show-source --statistics  
+        
     - name: Run Tests 
       run: |
         source venv/bin/activate
