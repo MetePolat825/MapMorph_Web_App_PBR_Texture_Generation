@@ -243,7 +243,7 @@ def upload_image():
                     metallic_filename = os.path.splitext(file.filename)[0] + "_Metallic." + desired_extension
                 elif naming_convention == "T_texturename_Roughness":
                     metallic_filename = "T_" + os.path.splitext(file.filename)[0] + "_Metallic." + desired_extension
-                elif naming_convention == "T_texturename_R":
+                else:
                     metallic_filename = "T_" + os.path.splitext(file.filename)[0] + "_M." + desired_extension
                 
                 # Export the metallic map
@@ -265,7 +265,7 @@ def upload_image():
                     normal_filename = os.path.splitext(file.filename)[0] + "_Normal." + desired_extension
                 elif naming_convention == "T_texturename_Roughness":
                     normal_filename = "T_" + os.path.splitext(file.filename)[0] + "_Normal." + desired_extension
-                elif naming_convention == "T_texturename_R":
+                else:
                     normal_filename = "T_" + os.path.splitext(file.filename)[0] + "_N." + desired_extension
                 
                 # Export the Normal/Bump map
@@ -285,7 +285,7 @@ def upload_image():
                 processed_filename = os.path.splitext(file.filename)[0] + "_Roughness." + desired_extension
             elif naming_convention == "T_texturename_Roughness":
                 processed_filename = "T_" + os.path.splitext(file.filename)[0] + "_Roughness." + desired_extension
-            elif naming_convention == "T_texturename_R":
+            else:
                 processed_filename = "T_" + os.path.splitext(file.filename)[0] + "_R." + desired_extension
                 
             print("Processed roughness texture saved as", processed_filename)

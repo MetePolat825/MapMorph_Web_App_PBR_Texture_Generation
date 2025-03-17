@@ -102,7 +102,7 @@ def greyscale_adjust(img:np.ndarray, intensity_factor:float = 1.0, grey_factor:f
     """
 
     # Normalize the image
-    img_normalized = cv2.normalize(img, None, 0, 255, cv2.NORM_MINMAX)
+    img_normalized = cv2.normalize(img.astype(np.float32), None, 0, 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
 
     # Adjust intensity by multiplying with intensity_factor
     img_normalized = cv2.convertScaleAbs(img_normalized * intensity_factor)
@@ -160,7 +160,7 @@ def resize_and_crop(image_path:str, target_size=(512, 512)) -> np.ndarray:
         bottom = (height + target_size[1]) / 2
 
         cropped_img = img.crop((left, top, right, bottom))
-        resized_img = cropped_img.resize(target_size, Image.LANCZOS)
+        resized_img = cropped_img.resize(target_size, Image.Resampling.LANCZOS)
 
         return np.array(resized_img)
 
@@ -186,8 +186,8 @@ def generate_normal_map(image: np.ndarray, normal_configuration:str) -> np.ndarr
     grad_y = cv2.Sobel(gray_image, cv2.CV_64F, 0, 1, ksize=3)
 
     # Normalize gradients to the range [0, 255]
-    grad_x = cv2.normalize(grad_x, None, 0, 255, cv2.NORM_MINMAX)
-    grad_y = cv2.normalize(grad_y, None, 0, 255, cv2.NORM_MINMAX)
+    grad_x = cv2.normalize(grad_x, None, 0, 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
+    grad_y = cv2.normalize(grad_y, None, 0, 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
 
     # The Z component in a normal map is typically the constant (usually 1)
     # Normalize Z to 127 (midpoint of 0 to 255 range, representing neutral depth)
@@ -199,9 +199,10 @@ def generate_normal_map(image: np.ndarray, normal_configuration:str) -> np.ndarr
     # Optionally apply different configurations for bump maps or normal maps
     if normal_configuration == "Bump Map":
         # In bump maps, the normal vectors can have different interpretations
-        normal_map = cv2.cvtColor(normal_map, cv2.COLOR_BGR2GRAY)
+        gray_normal_map = cv2.cvtColor(normal_map, cv2.COLOR_BGR2GRAY)
+
         # Optionally apply custom scaling for bump map visualization
-        normal_map = cv2.applyColorMap(normal_map, cv2.COLORMAP_JET)
+        normal_map = cv2.applyColorMap(gray_normal_map, cv2.COLORMAP_JET)
 
     return normal_map
 
@@ -215,12 +216,13 @@ def apply_segmentation(image: np.ndarray) -> np.ndarray:
     return image
 
 
-def detect_material(image: np.ndarray) -> str:
+def detect_material(image: np.ndarray) -> np.ndarray:
     """
     Detect material using AI or manual selection.
     """
     # Use manually selected material
-
+    detected_material_image = image
+    
     return image
 
 
@@ -234,11 +236,12 @@ def apply_upscaling(image: np.ndarray) -> np.ndarray:
     return upscaled_image
 
 
-def set_texel_density(image: np.ndarray) -> str:
+def set_texel_density(image: np.ndarray) -> np.ndarray:
     """
     Set texel density using AI.
     """
-    return image
+    set_texel_image = image
+    return set_texel_image
 
 
 def add_grunge(image: np.ndarray, grunge_map_path:str) -> np.ndarray:
@@ -290,32 +293,32 @@ def make_tiling(img: np.ndarray) -> np.ndarray:
     Returns:
         process_image (numpy.ndarray): The tiling texture image.
     """
-    # Read the image
-
-    # Get image dimensions
-    height, width, _ = img.shape
+    # Ensure image is in float32 for blending
+    img = img.astype(np.float32) / 255.0
     
-    # Create a new image with double the size to accommodate tiling
-    tiled_image = np.zeros((height * 2, width * 2, 3), dtype=img.dtype)
+    # Split the image into four quadrants and swap them
+    h, w, c = img.shape
+    half_h, half_w = h // 2, w // 2
     
-    # Place the original image in the four quadrants
-    tiled_image[0:height, 0:width] = img
-    tiled_image[0:height, width:width*2] = img
-    tiled_image[height:height*2, 0:width] = img
-    tiled_image[height:height*2, width:width*2] = img
+    top_left = img[:half_h, :half_w]
+    top_right = img[:half_h, half_w:]
+    bottom_left = img[half_h:, :half_w]
+    bottom_right = img[half_h:, half_w:]
     
-    # Blend the right edge with the left edge (wrap horizontally)
-    tiled_image[0:height, width:width*2] = np.concatenate([img[:, -width//2:], img[:, :width//2]], axis=1)
-
-    # Blend the bottom edge with the top edge (wrap vertically)
-    tiled_image[height:height*2, 0:width] = np.concatenate([img[-height//2:, :], img[:height//2, :]], axis=0)
-
-    # Copy the top-left quadrant's edges into the bottom-right corner
-    tiled_image[height:height*2, width:width*2] = np.concatenate([img[-height//2:, -width//2:], img[:height//2, -width//2:]], axis=0)
-
-    process_image = tiled_image
+    # Swap quadrants
+    blended = np.zeros_like(img)
+    blended[:half_h, :half_w] = bottom_right
+    blended[:half_h, half_w:] = bottom_left
+    blended[half_h:, :half_w] = top_right
+    blended[half_h:, half_w:] = top_left
     
-    return process_image
+    # Apply Gaussian blur to smooth the seams
+    blended = cv2.GaussianBlur(blended, (31, 31), 0)
+    
+    # Normalize back to 0-255
+    blended = np.clip(blended * 255.0, 0, 255).astype(np.uint8)
+    
+    return blended
 
 
 def force_square(img: np.ndarray) -> np.ndarray:
