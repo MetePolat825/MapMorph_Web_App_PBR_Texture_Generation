@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MapMorph - PBR Texture Generator{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'});" class="btn btn-secondary" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V4.707l3.147 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 4.707V11.5A.5.5 0 0 0 8 12z"/>
+        </svg>
+        Go to Top
+    </button>
+
+</head>
+<body class="bg-dark text-light">
+    <div>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
+        
+          <div class="container-fluid">
+              <!-- Logo -->
+              <a href="{{ url_for('home') }}">
+                  <img src="{{ url_for('static', filename='mapmorph.png') }}" alt="MapMorph Logo" class="rounded" style="width: 50px;">
+              </a>
+
+              <h1>MapMorph Documentation</h1>
+      
+              <!-- Toggle Button for Mobile -->
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+      
+              <!-- Navigation Links -->
+              <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                  <ul class="navbar-nav">
+                      
+                      <li class="nav-item"><a class="nav-link fw-semibold" href="{{ url_for('home') }}">HOME</a></li>
+                      <li class="nav-item"><a class="nav-link fw-semibold" href="{{ url_for('processing') }}">PROCESSING</a></li>
+                      <li class="nav-item"><a class="nav-link fw-semibold" href="{{ url_for('auth') }}">LOGIN/SIGNUP</a></li>
+                      <li class="nav-item"><a class="nav-link fw-semibold" href="{{ url_for('pricing') }}">PRICING</a></li>
+                      <li class="nav-item"><a class="nav-link fw-semibold" href="{{ url_for('documentation') }}">DOCUMENTATION</a></li>
+                      
+                      <!-- Dropdown Example (Optional) -->
+                      <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle fw-semibold" href="#" data-bs-toggle="dropdown">MORE</a>
+                          <ul class="dropdown-menu rounded-3 shadow">
+                              <li><a class="dropdown-item rounded-2" href="{{ url_for('faqs') }}">FAQ</a></li>
+                              <li><a class="dropdown-item rounded-2" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">GitHub</a></li>
+                              <li><a class="dropdown-item rounded-2" href="{{ url_for('pricing') }}">API ACCESS</a></li>
+                              <li><a class="dropdown-item rounded-2" href="{{ url_for('bug_report') }}">REPORT A BUG</a></li>
+                          </ul>
+                      </li>
+      
+                      <!-- Download Button -->
+                      <li class="nav-item">
+                          <a href="https://www.kickstarter.com/">
+                              <button type="button" class="btn btn-primary px-4">SUPPORT US❤️</button>
+                          </a>
+                      </li>
+                      
+                  </ul>
+              </div>
+          </div>
+            <div class="sidebar" id="sidebar" style="position: fixed; top: 70px; left: 0; width: 275px; height: calc(100vh - 56px); overflow-y: auto; transition: none;">
+            <h3 class="sidebar_header"><b>MapMorph v. 1.0</b></h3>
+            <input type="text" id="tocSearch" placeholder="Search...">
+            <script>
+                document.getElementById('tocSearch').addEventListener('input', function() {
+              const query = this.value.toLowerCase();
+              document.querySelectorAll('.sidebar ul li').forEach(item => {
+                  const text = item.textContent.toLowerCase();
+                  item.style.display = text.includes(query) ? 'block' : 'none';
+              });
+                });
+            </script>
+
+            <p>
+                <a href="{{url_for('documentation')}}">Return to Main Page</a>
+            </p>
+
+            <h3>Table of Contents</h3>
+
+            <hr>
+
+            <h3>Overview</h3>
+            <ul>
+                <li><a href="{{ url_for('about') }}">1.1 - About MapMorph</a></li>
+                <li><a href="{{ url_for('version_history') }}">1.2 - Version History & Updates</a></li>
+                <li><a href="{{ url_for('roadmap') }}">1.3 - Roadmap</a></li>
+                <li><a href="{{ url_for('getting_started') }}">1.4 - Getting Started with MapMorph</a></li>
+                <li><a href="{{ url_for('faqs') }}">1.5 - FAQs</a></li>
+            </ul>
+
+            <hr>
+
+            <h3>Web Application</h3>
+            <ul>
+                <li><a href="{{ url_for('web_app_overview') }}">2.1 - Overview</a></li>
+                <li><a href="{{ url_for('uploading_setup') }}">2.2 - Uploading Textures and Setup</a></li>
+                <li><a href="{{ url_for('user_preferences_setup') }}">2.3 - User Preferences</a></li>
+            </ul>
+
+            <hr>
+
+            <h3>Advanced Features</h3>
+            <ul>
+                <li><a href="{{ url_for('advanced_overview') }}">3.1 - Advanced Features Introduction</a></li>
+                <li><a href="{{ url_for('api_access') }}">3.2 - API Access</a></li>
+                <li><a href="{{ url_for('contributing') }}">3.3 - Contributing</a></li>
+                <li><a href="{{ url_for('acknowledgments') }}">3.4 - Acknowledgments</a></li>
+   
+            </ul>   
+
+            <hr>
+
+            <p>MapMorph™ 1.0 &copy; 2025</p>
+
+        </div>
+      </nav>
+    </div>
+    <!-- Main Content -->
+    <div class="documentation-content">
+
+        <!-- Page Content -->
+        <main>
+            {% block content %}{% endblock %}
+
+            <p><a href="{{ url_for('documentation') }}">← Back to Main Page</a></p>
+
+
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+
+                <p>&copy; 2025 MapMorph. All rights reserved.</p>
+                <p>Contact us at <a href="mailto:support@mapmorph.com">support@mapmorph.com</a>or through GitHub.</p>
+                <p>Submit a bug report at <a href="{{url_for('bug_report')}}"> to report an issue with this page.</a>.</p>
+    
+                
+                <div class="col-12 col-md pb-4">
+                  <a href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation"><img class="col-3 col-md-6 img-fluid rounded" src="static/mapmorph.png"></a>
+                </div>
+                <div class="col-6 col-md">
+                  <h5>Our Products</h5>
+                  <ul class="list-unstyled text-small">
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">MapMorph - Texture Generation</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">Civic Builder - 3D Urban Generation</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">Coming Soon - Documentation Generator</a></li>
+                  </ul>
+                </div>
+                <div class="col-6 col-md">
+                  <h5>Social Media</h5>
+                  <ul class="list-unstyled text-small">
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">Website</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">X</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">YouTube</a></li>
+                  </ul>
+                </div>
+                <div class="col-6 col-md">
+                  <h5>Development</h5>
+                  <ul class="list-unstyled text-small">
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">GitHub</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">Documentation</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation/issues">Issue Tracker</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation/notes">Release Notes</a></li>
+                  </ul>
+                </div>
+                <div class="col-6 col-md">
+                  <h5>About</h5>
+                  <ul class="list-unstyled text-small">
+                    <li><a class="link-secondary text-decoration-none" href="https://mapmorph.org/community">Contact</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="https://mapmorph.org/privacy">Privacy</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation/license.md">License</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              </p></a><a class="css-12yofsa" href="{{ url_for('processing') }}"><svg height="32" viewBox="0 0 40 40" width="32" xmlns="http://www.w3.org/2000/svg" role="img" class="css-7ounzy"><path fill="currentColor" d="M15.556 29C15.768 29.359 16.166 29.6 16.62 29.6H23.38C23.834 29.6 24.232 29.36 24.444 29H36.795C36.908 29 37 29.09 37 29.2V30.2C37 30.642 36.633 31 36.18 31H3.82C3.366 31 3 30.642 3 30.2V29.2C3 29.09 3.092 29 3.205 29zM33.775 7C34.452 7 35 7.532 35 8.188V25.812C35 26.468 34.452 27 33.775 27H6.225C5.547 27 5 26.468 5 25.812V8.188C5 7.532 5.548 7 6.224 7zM33.775 8H6.225C6.093 8 6 8.091 6 8.188V25.812C6 25.909 6.094 26 6.224 26H33.775C33.906 26 34 25.909 34 25.812V8.188C34 8.091 33.906 8 33.775 8z"></path></svg><p class="css-1s3xlio"><span class="css-dl5emj">Try for free</span><span class="css-1i8ycb6"> on the web</span></p></a>
+            
+        </div>
+     
+        </footer>
+</body>
+</html>

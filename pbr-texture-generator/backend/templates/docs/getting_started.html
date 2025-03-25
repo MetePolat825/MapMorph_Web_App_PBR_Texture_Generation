@@ -1,0 +1,46 @@
+{% extends "base_documentation.html" %}
+
+{% block title %}Getting Started - MapMorph{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Getting Started with MapMorph</h1>
+    <p>Welcome to MapMorph! Follow these steps to start generating high-quality PBR textures from real-world images.</p>
+    
+    <hr>
+
+    <h2>1. Accessing MapMorph</h2>
+    <p>MapMorph is a web-based tool, so there is no need for installation. Simply open your preferred browser and navigate to: 
+        <a href="https://mapmorph.com">https://mapmorph.com</a>
+    </p>
+
+    <h2>2. Uploading an Image</h2>
+    <p>Click on the <strong>"Upload Image"</strong> button and select a high-resolution image of a surface you want to convert into PBR textures.</p>
+    
+    <h2>3. Choosing a Workflow</h2>
+    <p>MapMorph supports multiple PBR workflows:</p>
+    <ul>
+        <li><strong>Roughness/Metallic</strong> - Used in engines like Unreal Engine.</li>
+        <li><strong>Specular/Glossiness</strong> - Common for Unity and older engines.</li>
+        <li><strong>Bump Mapping</strong> - For simpler shading models.</li>
+    </ul>
+    
+    <h2>4. Adjusting Settings</h2>
+    <p>Once the image is uploaded, tweak parameters like:</p>
+    <ul>
+        <li>Intensity of Normal Maps</li>
+        <li>Roughness Strength</li>
+        <li>Metallic Reflection</li>
+    </ul>
+
+    <h2>5. Generating & Downloading Textures</h2>
+    <p>Click <strong>"Generate Textures"</strong>. Once processed, you can preview the results and download maps in PNG or JPG format.</p>
+
+    <h2>6. Using Your Textures</h2>
+    <p>Import your generated textures into game engines or 3D software like Blender, Unity, or Unreal Engine.</p>
+
+    <h2>Need Help?</h2>
+    <p>Check out the <a href="faq.html">FAQ</a> or visit our <a href="community.html">community forum</a> for support.</p>
+
+</div>
+{% endblock %}

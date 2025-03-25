@@ -4,6 +4,7 @@ import numpy as np
 from PIL import Image
 import csv
 import io
+from werkzeug.datastructures import FileStorage
 
 
 class ImageProcessor:
@@ -153,7 +154,9 @@ class ImageProcessor:
         return presets
 
     @staticmethod
-    def greyscale_adjust(img:np.ndarray, intensity_factor:float = 1.0, grey_factor:float = 0.5) -> np.ndarray:
+    def greyscale_adjust(img:np.ndarray,
+                         intensity_factor:float = 1.0,
+                         grey_factor:float = 0.5) -> np.ndarray:
         """
         Main process function, process an image by converting it to grayscale, normalizing it, and adjusting its intensity towards 50% greyscale.
 
@@ -168,8 +171,21 @@ class ImageProcessor:
         # Convert to grayscale
         img_greyscale = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
+        # Ensure img_greyscale is of type ndarray and is in float32
+        img_greyscale = img_greyscale.astype(np.float32)
+
+        # Create an empty destination image (same shape but 8-bit unsigned int)
+        img_normalized = np.zeros(img_greyscale.shape, dtype=np.uint8)
+        
         # Normalize the image
-        img_normalized = cv2.normalize(img_greyscale.astype(np.float32), None, 0, 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
+        cv2.normalize(
+            src = img_greyscale,                    # Convert to float32 for normalization
+            dst = img_normalized,                   # No destination image provided (it's created internally)
+            alpha = 0,                              # Min value for normalization
+            beta = 255,                             # Max value for normalization
+            norm_type = cv2.NORM_MINMAX,            # Normalization type
+            dtype = cv2.CV_8U                       # Output type (8-bit unsigned int)
+        )
 
         # Adjust intensity by multiplying with intensity_factor
         img_normalized = cv2.convertScaleAbs(img_normalized * intensity_factor)
@@ -180,7 +196,8 @@ class ImageProcessor:
         return img_grey_shifted
 
     @staticmethod
-    def apply_roughness_to_image(image: np.ndarray, roughness:int = 50) -> np.ndarray:
+    def apply_roughness_to_image(image: np.ndarray,
+                                 roughness:int = 50) -> np.ndarray:
         """
         Apply roughness to the image by adjusting the intensity.
         This function is intended to be used with the standardized PBR values from the material presets.
@@ -199,7 +216,8 @@ class ImageProcessor:
         return adjusted_image
 
     @staticmethod
-    def standardize_pbr(image: np.ndarray, material_preset=None) -> np.ndarray:
+    def standardize_pbr(image: np.ndarray,
+                        material_preset=None) -> np.ndarray:
         """
         Standardize PBR values based on the selected preset.
         """
@@ -211,7 +229,8 @@ class ImageProcessor:
         return img_grey_shifted
 
     @staticmethod
-    def resize_and_crop(image_path: str, target_size=(512, 512)) -> np.ndarray:
+    def resize_and_crop(image_path: str,
+                        target_size=(512, 512)) -> np.ndarray:
         """
         Resize and crop the image to the target size and return as a numpy array.
         If the current size is larger than the target size, crop it.
@@ -238,7 +257,8 @@ class ImageProcessor:
             return np.array(resized_img)
 
     @staticmethod
-    def generate_normal_map(image: np.ndarray, normal_configuration:str) -> np.ndarray:
+    def generate_normal_map(image: np.ndarray,
+                            normal_configuration:str) -> np.ndarray:
         """Generate a normal map from the input image using the Sobel operator.
         The normal map is a 3-channel image where the first two channels represent the x and y gradients, and the third channel represents the depth.
         
@@ -317,7 +337,8 @@ class ImageProcessor:
         return set_texel_image
 
     @staticmethod
-    def add_grunge(image: np.ndarray, grunge_map_path:str) -> np.ndarray:
+    def add_grunge(image: np.ndarray,
+                   grunge_map_path:str) -> np.ndarray:
         """
         Add grunge map to texture.
         
@@ -423,7 +444,8 @@ class ImageProcessor:
         return process_image
 
     @staticmethod
-    def generate_metallic(input_image: np.ndarray, is_metallic:int = 0) -> np.ndarray:
+    def generate_metallic(input_image: np.ndarray,
+                          is_metallic:int = 0) -> np.ndarray:
         """
         Generate a basic metallic map for the image.
         
@@ -444,7 +466,8 @@ class ImageProcessor:
         return metallic_texture
 
     @staticmethod
-    def convert_image_format(input_image: np.ndarray, target_format: str = "Don't Convert") -> np.ndarray:
+    def convert_image_format(input_image: np.ndarray,
+                             target_format: str = "Don't Convert") -> np.ndarray:
         """
         Convert an image to a different format and return the image in the target format.
         
@@ -479,15 +502,74 @@ class ImageProcessor:
 
         # Return the resulting NumPy array
         return image_array_result
+    
+    
+    @staticmethod
+    def rename_output_image(file: FileStorage,
+                            naming_convention:str,
+                            desired_extension:str,
+                            target_map_type:str = None
+                            ) -> str:
+        """
+        Rename the output image based on the provided naming convention and desired extension.
+        
+        Parameters:
+            PROCESSED_FOLDER (str): The folder where the processed image will be saved.
+            processed_files (list): Frontend display list to store the names of processed files.
+            file (FileStorage): The original file being processed.
+            processed_image (numpy.ndarray): The processed image to be saved.
+            naming_convention (str): The naming convention to be used for the output file.
+            desired_extension (str): The desired file extension for the output image.
+        
+        Returns:
+            str: The filename of the processed image.
+        """
+        
+        # map type to hold one of Roughness/Normal/Metallic
+        map_type: str = ""
+        
+        # determine target map type
+        if target_map_type == None:
+            return "Target map type is not specified."
+        elif target_map_type == "Normal":
+            map_type = "_Normal"
+        elif target_map_type == "Roughness":
+            map_type = "_Roughness"
+        elif target_map_type == "Metallic":
+            map_type = "_Metallic"
+            
+        print(target_map_type) 
+            
+        if naming_convention == "Don't Convert":
+            processed_filename = os.path.splitext(file.filename)[0] + map_type + "." + desired_extension
+        elif naming_convention == "T_texturename_Roughness":
+            processed_filename = "T_" + os.path.splitext(file.filename)[0] + map_type + "." + desired_extension
+        else:
+            # short map type naming convention
+            processed_filename = "T_" + os.path.splitext(file.filename)[0] + map_type[:2] + "." + desired_extension
+            
+        return processed_filename
 
+            
+    @staticmethod      
+    def save_output_image(PROCESSED_FOLDER:str,
+                          processed_files: list,
+                          processed_filename: str,
+                          processed_image: np.ndarray,
+                          ) -> None:
+        """Process the image and save it to the processed folder.
 
-class ImagePreProcessor:
-    pass
-
-
-class ImageMainProcessor:
-    pass
-
-
-class ImagePostProcessor:
-    pass
+        Args:
+            PROCESSED_FOLDER (str): The folder where the processed image will be saved.
+            processed_files (list): Frontend display list to store the names of processed files.
+            processed_filename (str): The filename of the processed image.
+            processed_image (np.ndarray): The processed image to be saved.
+            
+        Returns:
+            None
+            
+        """
+        # Process the image and save it to the processed folder
+        processed_filepath = os.path.join(PROCESSED_FOLDER, processed_filename)
+        cv2.imwrite(processed_filepath, processed_image)
+        processed_files.append(processed_filename)

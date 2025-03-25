@@ -16,6 +16,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEJ+6d5+zF3mlRk4B17t1J7uGxTLO5Ih3wfr4pzcF07+0Jz9E++hEkhU4b+IQ" crossorigin="anonymous">
+
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
     <button onclick="window.scrollTo({top: 0, behavior: 'smooth'});" class="btn btn-secondary" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
@@ -28,6 +31,7 @@
 </head>
 <body class="bg-dark text-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
+      
         <div class="container-fluid">
             <!-- Logo -->
             <a href="{{ url_for('home') }}">
@@ -49,17 +53,16 @@
                     <li class="nav-item"><a class="nav-link fw-semibold" href="{{ url_for('processing') }}">PROCESSING</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold" href="{{ url_for('auth') }}">LOGIN/SIGNUP</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold" href="{{ url_for('pricing') }}">PRICING</a></li>
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="{{ url_for('help') }}">HELP</a></li>
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="{{ url_for('bug_report') }}">REPORT A BUG</a></li>
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="https://metepolat825.github.io/docs-mapmorph.github.io/">DOCUMENTATION</a></li>
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="{{ url_for('pricing') }}">API ACCESS</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="{{ url_for('documentation') }}">DOCUMENTATION</a></li>
                     
                     <!-- Dropdown Example (Optional) -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle fw-semibold" href="#" data-bs-toggle="dropdown">MORE</a>
                         <ul class="dropdown-menu rounded-3 shadow">
-                            <li><a class="dropdown-item rounded-2" href="{{ url_for('help') }}">FAQ</a></li>
+                            <li><a class="dropdown-item rounded-2" href="{{ url_for('faqs') }}">FAQ</a></li>
                             <li><a class="dropdown-item rounded-2" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">GitHub</a></li>
+                            <li><a class="dropdown-item rounded-2" href="{{ url_for('pricing') }}">API ACCESS</a></li>
+                            <li><a class="dropdown-item rounded-2" href="{{ url_for('bug_report') }}">REPORT A BUG</a></li>
                         </ul>
                     </li>
     
@@ -73,6 +76,59 @@
                 </ul>
             </div>
         </div>
+
+
+        <div class="sidebar" id="sidebar" style="overflow-y: auto; max-height: 100vh; transition: transform 0.3s ease-in-out;">
+          <h2 class="sidebar_header"><b>MapMorph v. 1.0</b></h2>
+          <input type="text" id="tocSearch" placeholder="Search...">
+          <script>
+              document.getElementById('tocSearch').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            document.querySelectorAll('.sidebar ul li').forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(query) ? 'block' : 'none';
+            });
+              });
+          </script>
+
+          <p>
+              <a href="docs/documentation.html">Return to Main Page</a>
+          </p>
+
+          <h2>Table of Contents</h2>
+
+
+          <h2>1. Overview</h2>
+          <ul>
+              <li><a href="about.html">1.1 - About MapMorph</a></li>
+              <li><a href="version_history.html">1.2 - Version History & Updates</a></li>
+              <li><a href="getting_started.html">1.3 - Getting Started with MapMorph</a></li>
+              <li><a href="web_application_guide.html">1.4 - Using the Web Application</a></li>
+              <li><a href="contributing.html">1.5 - Contributing</a></li>
+              <li><a href="troubleshooting_faq.html">1.6 - Troubleshooting & FAQs</a></li>
+              <li><a href="acknowledgments.html">1.7 - Acknowledgments</a></li>
+          </ul>
+
+          <h2>2. Web Application</h2>
+          <ul>
+              <li><a href="import_imagery.html">2.1 - Overview</a></li>
+              <li><a href="model_selection.html">2.2 - Uploading Textures and Setup</a></li>
+              <li><a href="detection_process.html">2.3 - User Preferences and Model Selection</a></li>
+              <li><a href="post_processing.html">2.4 - Post Processing of Output</a></li>
+              <li><a href="export_output.html">2.5 - Export of Output</a></li>
+              <li><a href="faqs.html">2.5 - FAQs</a></li>
+          </ul>
+
+          <h2>3. Advanced Features</h2>
+          <ul>
+              <li><a href="plugin_overview.html">3.1 - Advanced Features Introduction</a></li>
+              <li><a href="import_feature_data.html">3.2 - Pricing Plans</a></li>
+              <li><a href="user_options.html">3.3 - API Access</a></li>
+              <li><a href="geometry_nodes_integration.html">3.4 - For Developers</a></li>
+              <li><a href="adding_extra_features.html">3.5 - Adding Extra Features</a></li>
+                <p>MapMorph™ 1.0 &copy; 2025</p>
+          </ul>   
+      </div>
     </nav>
 
     <!-- Main Content -->
@@ -99,8 +155,9 @@
                   <h5>Our Products</h5>
                   <ul class="list-unstyled text-small">
                     <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">MapMorph - Texture Generation</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">Civic Builder - 3D Urban Generation</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">Coming Soon - Documentation Generator</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/Civic_Builder_Procedural_City_Modeling">Civic Builder - Building Detector and Generator</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/">Coming Soon - 3D Model Generator</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/">Coming Soon - Documentation Generator</a></li>
                   </ul>
                 </div>
                 <div class="col-6 col-md">
@@ -114,10 +171,10 @@
                 <div class="col-6 col-md">
                   <h5>Development</h5>
                   <ul class="list-unstyled text-small">
-                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">GitHub</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">Documentation</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">GitHub Source</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="{{ url_for('documentation') }}">Documentation</a></li>
                     <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation/issues">Issue Tracker</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation/notes">Release Notes</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="{{ url_for('version_history') }}">Release Notes</a></li>
                   </ul>
                 </div>
                 <div class="col-6 col-md">
@@ -125,7 +182,7 @@
                   <ul class="list-unstyled text-small">
                     <li><a class="link-secondary text-decoration-none" href="https://mapmorph.org/community">Contact</a></li>
                     <li><a class="link-secondary text-decoration-none" href="https://mapmorph.org/privacy">Privacy</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation/license.md">License</a></li>
+                    <li><a class="link-secondary text-decoration-none" href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation/LICENSE">License</a></li>
                   </ul>
                 </div>
               </div>
@@ -139,13 +196,7 @@
 
         
 
-    <script>
-        // Function to toggle the sidebar
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            sidebar.classList.toggle('active');
-        }
-    </script>
+    
 
 </body>
 </html>

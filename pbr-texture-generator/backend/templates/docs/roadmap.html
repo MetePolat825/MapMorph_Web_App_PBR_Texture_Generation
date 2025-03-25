@@ -1,0 +1,63 @@
+{% extends "base_documentation.html" %}
+
+{% block title %}MapMorph Roadmap{% endblock %}
+
+{% block content %}
+<div class="main-container">
+    <div class="content">
+        <h1 class="center_txt"><b>MapMorph Development Roadmap</b></h1>
+        <hr>
+        <p>This page outlines the future development plans for MapMorph, including upcoming features, improvements, and major milestones.</p>
+        
+        <h2>Current Development Stage</h2>
+        <p>MapMorph is currently in its initial release phase, providing essential texture generation features with AI enhancements.</p>
+        
+        <h2>Planned Features & Milestones</h2>
+        <table style="border-collapse: collapse; width: 100%;">
+            <tr>
+                <th style="border: 1px solid black; padding: 8px; text-align: left;">Milestone</th>
+                <th style="border: 1px solid black; padding: 8px; text-align: left;">Planned Release</th>
+                <th style="border: 1px solid black; padding: 8px; text-align: left;">Details</th>
+            </tr>
+            <tr>
+                <td style="border: 1px solid black; padding: 8px;">v1.1 - 3D visualizer in frontend, AI Tiling Removal, AI Texel Density, Support for Gloss/Spec and Bump workflows</td>
+                <td style="border: 1px solid black; padding: 8px;">Q2 2025</td>
+                <td style="border: 1px solid black; padding: 8px;">Optimize processing speed for texture generation and improve AI model efficiency.</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid black; padding: 8px;">v1.2 - Material detection overhaul using AI</td>
+                <td style="border: 1px solid black; padding: 8px;">Q3 2025</td>
+                <td style="border: 1px solid black; padding: 8px;">Support additional texture maps, including height maps and ambient occlusion.</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid black; padding: 8px;">v1.3 - Explanded Custom Presets & Material Libraries</td>
+                <td style="border: 1px solid black; padding: 8px;">Q4 2025</td>
+                <td style="border: 1px solid black; padding: 8px;">Allow users to create and save custom texture presets for specific workflows (Unreal, Unity, etc.).</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid black; padding: 8px;">v2.0 - Full AI Material Recognition and Segmentation</td>
+                <td style="border: 1px solid black; padding: 8px;">Q1 2026</td>
+                <td style="border: 1px solid black; padding: 8px;">Advanced AI segmentation to automatically classify materials in an image and generate accurate PBR maps.</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid black; padding: 8px;">v2.5 - Community Marketplace</td>
+                <td style="border: 1px solid black; padding: 8px;">Q2 2026</td>
+                <td style="border: 1px solid black; padding: 8px;">Introduce a platform where users can share and sell their custom textures and material presets.</td>
+            </tr>
+        </table>
+        
+        <h2>Long-Term Vision</h2>
+        <ul>
+            <li>Integration with 3D modeling software (Blender, Maya, 3ds Max) via plugins and through API access.</li>
+            <li>Real-time texture editing in the browser using a 3D viewer.</li>
+            <li>Cloud-based storage and collaboration tools for developers and artists.</li>
+            <li>Mobile standalone app version for quick texture generation on the go.</li>
+        </ul>
+        
+        <p>Have suggestions or features you’d like to see? <a href="contact.html">Contact us</a> with your ideas!</p>
+        
+        <hr>
+        
+    </div>
+</div>
+{% endblock %}

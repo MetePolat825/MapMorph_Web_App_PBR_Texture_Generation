@@ -1,0 +1,100 @@
+{% extends "base_documentation.html" %}
+
+{% block title %}API Access{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>MapMorph API Access</h1>
+    <p>MapMorph provides a RESTful API that allows developers to integrate texture generation capabilities into their own applications, pipelines, and workflows.</p>
+
+    <hr>
+
+    <h2>Getting API Access</h2>
+    <p>To use the MapMorph API, you need to obtain an API key:</p>
+    <ol>
+        <li>Sign up or log in to your MapMorph account.</li>
+        <li>Go to the <a href="dashboard.html">API Dashboard</a> in your user settings.</li>
+        <li>Generate an API key.</li>
+        <li>Use this key in your API requests for authentication.</li>
+    </ol>
+    
+    <hr>
+
+    <h2>Authentication</h2>
+    <p>All API requests require authentication using your unique API key. The key should be included in the request headers:</p>
+    
+    <pre><code>
+    Authorization: Bearer YOUR_API_KEY
+    </code></pre>
+
+    <hr>
+
+    <h2>Available API Endpoints</h2>
+
+    <h3>1. Upload an Image</h3>
+    <p>Uploads an image for processing.</p>
+    <pre><code>
+    POST /api/upload
+    Headers: 
+    - Authorization: Bearer YOUR_API_KEY
+    - Content-Type: multipart/form-data
+    Body: { "file": image.jpg }
+    </code></pre>
+
+    <h3>2. Process a Texture</h3>
+    <p>Processes an uploaded image into PBR textures.</p>
+    <pre><code>
+    POST /api/process
+    Headers: 
+    - Authorization: Bearer YOUR_API_KEY
+    - Content-Type: application/json
+    Body: { "image_id": "abc123", "preset": "unreal_engine" }
+    </code></pre>
+
+    <h3>3. Retrieve Processed Textures</h3>
+    <p>Fetches the processed texture files.</p>
+    <pre><code>
+    GET /api/textures/{image_id}
+    Headers:
+    - Authorization: Bearer YOUR_API_KEY
+    </code></pre>
+
+    <hr>
+
+    <h2>Rate Limits</h2>
+    <p>Free-tier users have limited API requests per day. Paid plans offer higher limits. See <a href="{{ url_for('pricing') }}">pricing details</a>.</p>
+
+    <hr>
+
+    <h2>Example Usage</h2>
+    <p>Using Python to upload an image and process textures:</p>
+
+    <pre><code>
+    import requests
+
+    API_KEY = "your_api_key"
+    UPLOAD_URL = "https://mapmorph.com/api/upload"
+    PROCESS_URL = "https://mapmorph.com/api/process"
+
+    headers = { "Authorization": f"Bearer {API_KEY}" }
+
+    # Upload Image
+    files = { "file": open("example.jpg", "rb") }
+    response = requests.post(UPLOAD_URL, headers=headers, files=files)
+    image_id = response.json()["image_id"]
+
+    # Process Image
+    payload = { "image_id": image_id, "preset": "unreal_engine" }
+    response = requests.post(PROCESS_URL, headers=headers, json=payload)
+
+    print(response.json())
+    </code></pre>
+
+    <hr>
+
+    <h2>Support</h2>
+    <p>For API support, check our <a href="faq.html">FAQs</a> or contact <a href="mailto:support@mapmorph.com">support@mapmorph.com</a>.</p>
+
+    <p><a href="index.html">← Back to Home</a></p>
+</div>
+{% endblock %}

@@ -4,21 +4,50 @@
 
 {% block content %}
 
-<div class="container mt-4">
-    <h1>Get Started</h1>
-    <text>Please select you preferences below. If you feel stuck at any point, please refer to the documentation at  <a href="https://github.com/your-repo/docs" target="_blank">GitHub Pages</a>. Don't hesitate to contact for further support using support@mapmorph.io</text>
+<style>
+    /* Fullscreen Background */
+    .overlay {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: url('{{ url_for('static', filename='processing_background.jpg') }}') no-repeat center center fixed;
+        background-size: cover;
+        height: 65vh;
+        text-align: center;
+        position: relative;
+    }
+</style>
 
-    <!-- Demo video container, this should link to youtube ideally instead of locally hosting an image -->
-    <div class="demo-container text-center my-4">
-        <h3>How to Use the App</h3>
-        <a href="https://www.youtube.com/watch?v=P6Kfp0JXXEU" target="_blank" class="btn btn-primary">Watch the Demo Video on YouTube</a>
+<div class="overlay">
+    <div class="content-box">
+        <div class="container mt-4">
+
+            <h1>Get Started</h1>
+            <text>Please select you preferences below. If you feel stuck at any point, please refer to the documentation at  <a href="{{ url_for('documentation') }}" target="_blank">Documentation</a>. Don't hesitate to contact for further support using support@mapmorph.io</text>
+        
+            <!-- Demo video container, this should link to youtube ideally instead of locally hosting an image -->
+            <div class="demo-container text-center my-4">
+                <h3>How to Use the App</h3>
+                <a href="https://youtu.be/OwkuAnrCxuc" target="_blank" class="btn btn-primary">Watch the Demo Video on YouTube</a>
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="container mt-4">
     <div class="row">
         <!-- Left Column: Image Upload & Processing -->
+
+
+        
         <div class="col-md-6">
+                        
+            <!-- Help Button -->
+            <a href="{{ url_for('uploading_setup') }}" target="_blank" class="btn btn-info mb-3">
+                <i class="fas fa-question-circle"></i> Help
+            </a>
+            
             <div class="section" id="upload-section">
                 <h2>Upload Images</h2>
                 <input type="file" id="file-input" name="file" multiple>
@@ -33,6 +62,7 @@
                     <i class="fas fa-cogs"></i> Process Images
                 </button>
             </div>
+
 
             <!-- Uploaded Images Section -->
             <div class="section" id="uploaded-images" style="border: 2px solid #007BFF; padding: 20px; margin-top: 20px;">
@@ -61,6 +91,11 @@
         <!-- Right Column: Processing Section -->
         <div class="col-md-6">
             <div class="container">
+
+            <!-- Help Button -->
+            <a href="{{ url_for('user_preferences_setup') }}" target="_blank" class="btn btn-info mb-3">
+                <i class="fas fa-question-circle"></i> Help
+            </a>
 
             <!-- Toggle Button for Advanced Options -->
             <button class="btn btn-secondary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-options">
@@ -98,6 +133,8 @@
                 
                     <!-- Export Settings -->
 
+                    <p class="text-muted">Choose your desired export options and preferences for processing your textures. Adjust the settings below to customize the output to your needs.</p>
+
                     <div class="mb-3">
                         <label for="naming-convention" class="form-label">Desired Naming Convention</label>
                         <select class="form-select" id="naming-convention">
@@ -130,17 +167,24 @@
                     </div>
                 </fieldset>
 
+                
                 <fieldset class="border p-3 mb-3">
                     <legend class="w-auto">PBR Processing</legend>
+
+                    <p class="text-muted">
+                        The PBR Standardization feature ensures that your textures adhere to industry-standard physically based rendering (PBR) values and consistent across multiple uploads. 
+                    </p>
+
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="pbr-standardize" onchange="toggleDropdown('pbr-standardize', 'pbr-preset')">
                         <label class="form-check-label" for="pbr-standardize">Standardize PBR values</label>
                     </div>
                     <div class="mb-3">
-                        <label for="pbr-preset" class="form-label">PBR Preset</label>
+                        <label for="pbr-preset" class="form-label">PBR Material Preset</label>
                         <select class="form-select" id="pbr-preset" disabled>
-                            <option>Unreal Engine Realistic</option>
-                            <option>Unity Stylized</option>
+                            <option selected>Physically Based Database</option>
+                            <option>Unreal Engine</option>
+                            <option>Unity Engine</option>
                         </select>
                     </div>
 
@@ -168,11 +212,11 @@
                     <legend class="w-auto">Additional Processing</legend>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="make-tiling">
-                        <label class="form-check-label" for="make-tiling">Remove Image Tiling (Make Seamless)</label>
+                        <label class="form-check-label" for="make-tiling">Make Image Seamless, Tileable</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="force-square">
-                        <label class="form-check-label" for="force-square">Force Final Texture to be Square (Cropping)</label>
+                        <label class="form-check-label" for="force-square">Force Final Texture to be Square (via Cropping)</label>
                     </div>
                 </fieldset>
 
@@ -209,7 +253,6 @@
                         </select>
                     </div>
                 </fieldset>
-
 
                 <fieldset class="border p-3 mb-3">
                     <legend class="w-auto">Advanced AI Processing</legend>
@@ -354,10 +397,10 @@
         });
     }
 
-    // Function to handle image upload
+
+    // Function to handle file upload and display information on frontend
     function uploadImages() {
         let files = document.getElementById("file-input").files;
-        let formData = new FormData();
 
         // Collect preferences data
         const preferences = {
@@ -383,13 +426,47 @@
             generate_normal: document.getElementById('generate-normal').checked,
         };
 
-        for (let i = 0; i < files.length; i++) {
-            formData.append("file", files[i]);
-            formData.append("preferences", JSON.stringify(preferences)); // Ensure 'preferences' is added
+        // Display or preview the images selected for upload
+        displayUploadedImages(files);
+
+        // Show progress bar and process button
+        document.getElementById("progress-container").style.display = 'none';  // Hide progress bar initially
+        document.getElementById("process-btn").style.display = 'block'; // Show the process button
+        // Store the files and preferences for later processing
+        window.uploadedFiles = files;
+        window.preferences = preferences;
+    }
+
+
+    // Function to handle the actual processing and file upload
+    function processImages() {
+        let files = window.uploadedFiles;
+        let preferences = window.preferences;
+        
+        if (!files || files.length === 0) {
+            Toastify({
+                text: "Please upload files first",
+                backgroundColor: "red",
+                duration: 3000
+            }).showToast();
+            return;
         }
 
-        document.getElementById("progress-container").style.display = 'block';
+        let formData = new FormData();
 
+        // Append files to form data
+        for (let i = 0; i < files.length; i++) {
+            formData.append("file", files[i]);
+        }
+        
+        // Append preferences to form data
+        formData.append("preferences", JSON.stringify(preferences));
+
+        // Show progress bar and hide process button
+        document.getElementById("progress-container").style.display = 'block';
+        document.getElementById("process-btn").style.display = 'none';
+
+        // Perform the POST request for image processing
         axios.post('/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -402,9 +479,13 @@
             }
         })
         .then(response => {
-            displayUploadedImages(files);
+            // After successful upload and processing, show the processed images
             displayProcessedImages(response.data.files);
+            
+            // Show the download button
             document.getElementById("download-btn").style.display = 'block';
+            
+            // Show success message
             Toastify({
                 text: "Images uploaded and processed successfully!",
                 backgroundColor: "green",
@@ -412,6 +493,7 @@
             }).showToast();
         })
         .catch(error => {
+            // Handle error
             console.error(error);
             Toastify({
                 text: "Error uploading images",
@@ -420,6 +502,7 @@
             }).showToast();
         });
     }
+
 
     function savePreferences() {
         const preferences = {

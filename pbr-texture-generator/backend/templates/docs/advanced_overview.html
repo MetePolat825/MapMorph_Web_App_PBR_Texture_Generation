@@ -1,0 +1,73 @@
+{% extends "base_documentation.html" %}
+
+{% block title %}Advanced Features - MapMorph{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Advanced Features Overview</h1>
+    <p>MapMorph includes a suite of advanced tools that enhance texture creation and optimization. These features provide additional control and automation to help artists, game developers, and designers create high-quality assets with ease.</p>
+
+    <hr>
+
+    <h2>AI Processing</h2>
+    <p>Leverage AI-powered enhancements to refine and optimize texture maps.</p>
+    <ul>
+        <li><strong>AI-Powered Noise Reduction:</strong> Removes unwanted artifacts and noise from textures.</li>
+        <li><strong>Smart Edge Detection:</strong> Enhances surface details while preserving sharp edges.</li>
+        <li><strong>Auto Balancing:</strong> Adjusts brightness, contrast, and color consistency across textures.</li>
+    </ul>
+
+    <hr>
+
+    <h2>AI Segmentation of Materials</h2>
+    <p>Automatically detect and classify materials within an image to generate accurate texture maps.</p>
+    <ul>
+        <li><strong>Material Categorization:</strong> AI identifies different materials (e.g., wood, metal, stone) in an image.</li>
+        <li><strong>Smart Masking:</strong> Generates masks for different material types for easy editing.</li>
+        <li><strong>Custom Material Mapping:</strong> Users can manually adjust or override AI-detected materials.</li>
+    </ul>
+
+    <hr>
+
+    <h2>Texel Density Setter</h2>
+    <p>Ensure consistent texel density across all assets for a uniform look.</p>
+    <ul>
+        <li><strong>Automatic Texel Density Calculation:</strong> MapMorph analyzes textures to determine optimal texel density.</li>
+        <li><strong>Custom Density Input:</strong> Manually set a specific texel density value for your textures.</li>
+        <li><strong>Real-Time Visualization:</strong> Preview texel density distribution before exporting.</li>
+    </ul>
+
+    <hr>
+
+    <h2>Texture Upscaler</h2>
+    <p>Enhance the resolution of textures while maintaining detail and sharpness.</p>
+    <ul>
+        <li><strong>AI-Based Super Resolution:</strong> Uses deep learning to upscale textures without losing quality.</li>
+        <li><strong>Supports 2x, 4x, and 8x Scaling:</strong> Choose the best resolution for your project.</li>
+        <li><strong>Preserve Fine Details:</strong> Maintains the integrity of patterns, textures, and edges.</li>
+    </ul>
+
+    <hr>
+
+    <h2>API Access</h2>
+    <p>Integrate MapMorph’s features directly into your workflow with API support.</p>
+    <ul>
+        <li><strong>Batch Processing:</strong> Automate texture conversion and processing through API calls.</li>
+        <li><strong>Cloud-Based Processing:</strong> Offload heavy computations to cloud servers.</li>
+        <li><strong>Custom Integrations:</strong> Use API endpoints to link MapMorph with external software like Blender, Unity, and Unreal Engine.</li>
+    </ul>
+
+    <hr>
+
+    <h2>Next Steps</h2>
+    <p>Explore more about each feature in detail:</p>
+    <ul>
+        <li><a href="ai_processing.html">AI Processing Details</a></li>
+        <li><a href="material_segmentation.html">AI Material Segmentation</a></li>
+        <li><a href="texel_density.html">Texel Density Configuration</a></li>
+        <li><a href="texture_upscaling.html">Texture Upscaler</a></li>
+        <li><a href="api_documentation.html">API Access & Documentation</a></li>
+    </ul>
+
+</div>
+{% endblock %}

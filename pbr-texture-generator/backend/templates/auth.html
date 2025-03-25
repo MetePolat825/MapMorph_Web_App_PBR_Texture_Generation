@@ -3,69 +3,176 @@
 {% block title %}MapMorph - Login/Signup{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>Login / Signup</h1>
-    <div class="auth-form">
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" placeholder="Enter your username">
+
+<style>
+    /* Fullscreen Background */
+    .overlay {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: url('{{ url_for('static', filename='processing_background.jpg') }}') no-repeat center center fixed;
+        background-size: cover;
+        height: 100vh;
+        text-align: center;
+        position: relative;
+        padding: 20px;
+    }
+
+    .content-box {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 400px;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+    }
+
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        border: none;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+    }
+
+    .social-btns {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+    }
+
+    .social-btns button {
+        width: 45%;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .forgot-password {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #007bff;
+        cursor: pointer;
+    }
+
+    .error-message {
+        color: red;
+        margin-top: 15px;
+    }
+</style>
+
+<div class="overlay">
+    <div class="content-box" style="background: rgba(255, 255, 255, 0.2);">
+        <div class="container mt-4">
+            <h1>Login / Signup</h1>
+
+            <div class="auth-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" id="remember-me">
+                    <label for="remember-me">Remember Me</label>
+                </div>
+
+                <button class="btn btn-primary" onclick="login()">Login</button>
+                <button class="btn btn-secondary" onclick="signup()">Signup</button>
+
+                <div class="forgot-password" onclick="forgotPassword()">Forgot Password?</div>
+
+                <div class="social-btns">
+                    <button class="btn btn-primary" onclick="googleLogin()">Login with Google</button>
+                    <button class="btn btn-secondary" onclick="facebookLogin()">Login with Facebook</button>
+                </div>
+
+                <!-- Error message (example) -->
+                <div class="error-message" id="error-message"></div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Enter your password">
-        </div>
-        <button class="btn btn-primary" onclick="login()">Login</button>
-        <button class="btn btn-secondary" onclick="signup()">Signup</button>
     </div>
 </div>
 
 <script>
     function login() {
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
+        // Simulating login process
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        // Simple validation
+        if (!username || !password) {
+            document.getElementById('error-message').innerText = 'Both username and password are required.';
+            return;
+        }
 
-        axios.post('/login', { username, password })
-            .then(response => {
-                Toastify({
-                    text: "Logged in successfully!",
-                    backgroundColor: "green",
-                    duration: 3000
-                }).showToast();
-                localStorage.setItem("username", response.data.username);
-                localStorage.setItem("membership", response.data.membership);
-                window.location.href = '/processing'; // Redirect to processing page
-            })
-            .catch(error => {
-                Toastify({
-                    text: "Invalid username or password",
-                    backgroundColor: "red",
-                    duration: 3000
-                }).showToast();
-            });
+        document.getElementById('error-message').innerText = '';
+        // Proceed with login (e.g., send data to server)
     }
 
     function signup() {
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
+        // Simulating signup process
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        if (!username || !password) {
+            document.getElementById('error-message').innerText = 'Both username and password are required.';
+            return;
+        }
 
-        axios.post('/signup', { username, password })
-            .then(response => {
-                Toastify({
-                    text: "Account created successfully!",
-                    backgroundColor: "green",
-                    duration: 3000
-                }).showToast();
-                localStorage.setItem("username", response.data.username);
-                localStorage.setItem("membership", response.data.membership);
-                window.location.href = '/processing'; // Redirect to processing page
-            })
-            .catch(error => {
-                Toastify({
-                    text: "Error creating account",
-                    backgroundColor: "red",
-                    duration: 3000
-                }).showToast();
-            });
+        document.getElementById('error-message').innerText = '';
+        // Proceed with signup (e.g., send data to server)
+    }
+
+    function forgotPassword() {
+        // Redirect or show password reset page
+        alert('Password reset functionality goes here!');
+    }
+
+    function googleLogin() {
+        // Simulate Google login
+        alert('Google login functionality goes here!');
+    }
+
+    function facebookLogin() {
+        // Simulate Facebook login
+        alert('Facebook login functionality goes here!');
     }
 </script>
+
+
+
+
+
 {% endblock %}

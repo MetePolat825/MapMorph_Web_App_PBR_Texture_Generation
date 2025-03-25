@@ -79,6 +79,72 @@ def bug_report():
 def processed_file(filename):
     return send_from_directory(os.path.abspath(PROCESSED_FOLDER), filename)
 
+@app.route('/documentation')
+def documentation():
+    return render_template('docs/documentation.html')
+
+
+@app.route('/about')
+def about():
+    return render_template('docs/about.html')
+
+@app.route('/version-history')
+def version_history():
+    return render_template('docs/version_history.html')
+
+@app.route('/roadmap')
+def roadmap():
+    return render_template('docs/roadmap.html')
+
+@app.route('/getting-started')
+def getting_started():
+    return render_template('docs/getting_started.html')
+
+@app.route('/faqs')
+def faqs():
+    return render_template('docs/faqs.html')
+
+@app.route('/web-app-overview')
+def web_app_overview():
+    return render_template('docs/web_app_overview.html')
+
+@app.route('/uploading-setup')
+def uploading_setup():
+    return render_template('docs/uploading_setup.html')
+
+@app.route('/user-preferences-setup')
+def user_preferences_setup():
+    return render_template('docs/user_preferences_setup.html')
+
+@app.route('/post-processing')
+def post_processing():
+    return render_template('docs/post_processing.html')
+
+@app.route('/export-output')
+def export_output():
+    return render_template('docs/export_output.html')
+
+@app.route('/integration')
+def integration():
+    return render_template('docs/integration.html')
+
+@app.route('/advanced-overview')
+def advanced_overview():
+    return render_template('docs/advanced_overview.html')
+
+
+@app.route('/api-access')
+def api_access():
+    return render_template('docs/api_access.html')
+
+@app.route('/contributing')
+def contributing():
+    return render_template('docs/contributing.html')
+
+@app.route('/acknowledgments')
+def acknowledgments():
+    return render_template('docs/acknowledgments.html')
+
 
 # Static route for processed images as a zip file
 @app.route('/download/processed.zip')
@@ -237,78 +303,55 @@ def upload_image():
                 print("Exporting image as", export_preference)
                 processed_image = ImageProcessor.convert_image_format(processed_image, export_preference)
 
+            # Helper function to process and save maps
+            def process_and_save_map(map_type, image, preset_name=None, preset_value=None):
+                if map_type == "Roughness":
+                    processed_map = image
+                elif map_type == "Normal":
+                    processed_map = ImageProcessor.generate_normal_map(image, preset_name)
+                elif map_type == "Metallic":
+                    processed_map = ImageProcessor.generate_metallic(image, preset_value)
+                else:
+                    return
+
+                processed_filename = ImageProcessor.rename_output_image(
+                    file,
+                    naming_convention,
+                    desired_extension,
+                    target_map_type=map_type
+                )
+
+                ImageProcessor.save_output_image(
+                    PROCESSED_FOLDER,
+                    processed_files,
+                    processed_filename,
+                    processed_map
+                )
+
+                print(f"Processed {map_type.lower()} texture saved as", processed_filename)
+
+
             # Generate roughness map if selected
             if preferences.get('generate_roughness', None):
-                
                 specular_workflow_preference = preferences.get('specular_workflow', "PBR Rough/Metallic Workflow")
-                
                 if specular_workflow_preference == "PBR Rough/Metallic Workflow":
                     print("Using PBR Rough/Metallic Workflow")
- 
-                    if naming_convention == "Don't Convert":
-                        processed_filename = os.path.splitext(file.filename)[0] + "_Roughness." + desired_extension
-                    elif naming_convention == "T_texturename_Roughness":
-                        processed_filename = "T_" + os.path.splitext(file.filename)[0] + "_Roughness." + desired_extension
-                    else:
-                        processed_filename = "T_" + os.path.splitext(file.filename)[0] + "_R." + desired_extension
-                        
-                    # Process the image and save it to the processed folder
-                    processed_filepath = os.path.join(PROCESSED_FOLDER, processed_filename)
-                    cv2.imwrite(processed_filepath, processed_image)
-                    processed_files.append(processed_filename)
-                    
-                    print("Processed roughness texture saved as", processed_filename)
-                    
+                    process_and_save_map("Roughness", processed_image)
                 else:
                     print("Using Specular/Glossiness Workflow has not yet been implemented, please select PBR Rough/Metallic Workflow.")
                     return jsonify({"Error": "Specular/Glossiness Workflow has not yet been implemented, please select PBR Rough/Metallic Workflow."}), 400
 
             # Generate normal map if selected
             if preferences.get('generate_normal', None):
-                
                 normal_preset_name = preferences.get('normal_bump_workflow', 'Normal Map')
-                
-                print("Selected normal map preset:", normal_preset_name)
+                process_and_save_map("Normal", resized_cropped_image, preset_name=normal_preset_name)
 
-                normal_map = ImageProcessor.generate_normal_map(resized_cropped_image, normal_preset_name)
-                
-                if naming_convention == "Don't Convert":
-                    normal_filename = os.path.splitext(file.filename)[0] + "_Normal." + desired_extension
-                elif naming_convention == "T_texturename_Roughness":
-                    normal_filename = "T_" + os.path.splitext(file.filename)[0] + "_Normal." + desired_extension
-                else:
-                    normal_filename = "T_" + os.path.splitext(file.filename)[0] + "_N." + desired_extension
-                
-                # Export the Normal/Bump map
-                normal_filepath = os.path.join(PROCESSED_FOLDER, normal_filename)
-                cv2.imwrite(normal_filepath, normal_map)
-                print("Normal map saved as", normal_filename)
-                processed_files.append(normal_filename)  # add here for frontend visualization
-                
             # Generate metallic map if selected
             if preferences.get('generate_metallic', None):
-                
                 material_preset_name = preferences.get('manual_material_selection', 'Brick')
                 material_preset = pbr_presets.get(material_preset_name, {})
-
                 metallic_value = material_preset.get('IsMetallic', 0)  # Default to not metallic if not specified
-                
-                print("Material preset:", material_preset_name, "IsMetallic:", metallic_value)
-
-                metallic_map = ImageProcessor.generate_metallic(processed_image,metallic_value)
-                
-                if naming_convention == "Don't Convert":
-                    metallic_filename = os.path.splitext(file.filename)[0] + "_Metallic." + desired_extension
-                elif naming_convention == "T_texturename_Roughness":
-                    metallic_filename = "T_" + os.path.splitext(file.filename)[0] + "_Metallic." + desired_extension
-                else:
-                    metallic_filename = "T_" + os.path.splitext(file.filename)[0] + "_M." + desired_extension
-                
-                # Export the metallic map
-                metallic_filepath = os.path.join(PROCESSED_FOLDER, metallic_filename)
-                cv2.imwrite(metallic_filepath, metallic_map)
-                print("Metallic map saved as", metallic_filename)
-                processed_files.append(metallic_filename)  # add here for frontend visualization
+                process_and_save_map("Metallic", processed_image, preset_value=metallic_value)
 
         except ValueError as e:
             return jsonify({"Error during main processing loop:": str(e)}), 400

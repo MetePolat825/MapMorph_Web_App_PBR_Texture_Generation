@@ -1,0 +1,103 @@
+{% extends "base_documentation.html" %}
+
+{% block title %}Welcome to MapMorph{% endblock %}
+
+{% block content %}
+
+<div>
+
+    <h3 class="center_txt">Welcome to the MapMorph Documentation</h3>
+
+    <p style="text-align: justify;">MapMorph is an AI-powered texture and material generation tool designed for 3D artists, game developers, and VFX professionals. MapMorph enables seamless transformation of input images into high-quality, physically based rendering (PBR) texture maps. Whether you are working on game assets, architectural visualizations, or digital twin applications, MapMorph provides an intuitive workflow to generate realistic textures with customizable settings.</p>
+
+    <h3 class="center_txt">Why Choose MapMorph?</h3>
+    <p>MapMorph offers several key advantages for your workflow:</p>
+    <ul style="text-align: justify;">
+        <li>User-friendly and efficient; simply upload an image, select processing options, and generate PBR maps.</li>
+        <li>A self-contained application that simplifies complex texture generation workflows.</li>
+        <li>Cross-platform support: Runs on Windows, Mac, and Linux via a Python Flask web application.</li>
+        <li>AI-driven segmentation and enhancement for detailed texture extraction.</li>
+        <li>Supports industry-standard formats such as PNG, JPG, and seamless integration with game engines like Unity and Unreal Engine.</li>
+        <li>Provides high-quality PBR textures with normal, roughness, metallic, and ambient occlusion maps.</li>
+    </ul>
+
+    <hr>
+
+    <h3 class="center_txt">Getting Started with MapMorph</h3>
+
+    <p>1 - Upload Your Image: Select or drag-and-drop an image of a surface or material into the input directory. Detailed instructions are available <a href="{{ url_for('uploading_setup') }}">here</a>.</p>    <img src="media/example_upload.jpg" class="center_img" loading="lazy" alt="Example of an uploaded texture image">
+    <p class="image-description">This image shows the initial upload of a texture image into the MapMorph tool.</p>
+    
+    <br>
+    <p>2 - Select Processing Options: Customize parameters such as resolution, tiling, AI enhancement, and texture map generation. Further details available <a href="{{ url_for('user_preferences_setup') }}">here</a>.</p>
+    
+    <img src="media/example_processing.PNG" class="center_img" loading="lazy" alt="Processing options interface in MapMorph">
+    <p class="image-description">This image illustrates the processing options available in MapMorph.</p>
+    
+    <br>
+    <p>3 - Generate PBR Texture Maps: Let MapMorph process the image and create normal, roughness, metallic, and other necessary maps.</p>
+    <img src="media/example_pbr_maps.PNG" class="center_img" loading="lazy" alt="Generated PBR texture maps">
+    <p class="image-description">Generated PBR texture maps ready for use in 3D modeling applications.</p>
+    
+    <br>
+    <p>4 - Download & Use: Save the generated textures and integrate them seamlessly into your 3D software or game engine.</p>
+    <img src="media/placeholder_gif.gif" class="center_img" loading="lazy" alt="Final PBR textures applied to a 3D model">
+    <p class="image-description">The final result with PBR textures applied to a 3D model.</p>
+    
+    <p>And that’s it! With just a few clicks, you can transform images into high-quality PBR textures.</p>
+    
+    <hr>
+    
+    <h2 class="center_txt">Where Can I Get MapMorph?</h2>
+    
+    <p>MapMorph is currently in development, with source code available on GitHub:</p>
+    <a href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation</a>
+    <p>The final version will be available through different distribution models:</p>
+
+    <ul>
+        <li>
+            <h3><span class="icon">🌐</span> Web Application</h3>
+            <p>A free-to-use web-based version with basic functionality. Paid options will unlock advanced features and higher resolutions.</p>
+        </li>
+        
+        <li>
+            <h3><span class="icon">🔄</span> Monthly Subscription Service</h3>
+            <p>A premium plan providing continuous updates, cloud storage, and AI-assisted texture generation.</p>
+        </li>
+
+        <li>
+            <h3><span class="icon">💻</span> Local License Version</h3>
+            <p>A one-time purchase software package with additional AI enhancements and offline capabilities.</p>
+        </li>
+    </ul>
+
+    <p><strong>Want to stay updated?</strong> Sign up for our newsletter to receive news and feature announcements.</p>
+    <p>Contact for pricing inquiries: <a href="mailto:support@mapmorph.com">support@mapmorph.com</a></p>
+    <hr>
+
+    <footer class="footer">
+        <div>
+            <p>Thank you for using MapMorph!</p>
+            <p>MapMorph is a free and educational project currently in development.</p>
+            <p>Follow the development here:</p>
+            <a href="https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation">https://github.com/MetePolat825/MapMorph_Web_App_PBR_Texture_Generation</a>
+            
+            <br><br>
+            <p>© 2024 MapMorph. All Rights Reserved.</p>
+            <p>
+                <a href="privacy_policy.html">Privacy Policy</a> |
+                <a href="terms_of_service.html">Terms of Service</a>
+            </p>
+            <p>For support and feedback: <a href="mailto:support@mapmorph.com">support@mapmorph.com</a></p>
+            <p>Follow us on
+                <a href="https://twitter.com" target="_blank">Twitter</a>,
+                <a href="https://facebook.com" target="_blank">Facebook</a>,
+                <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+            </p>
+        </div>
+    </footer>
+
+</div>
+
+
+{% endblock %}

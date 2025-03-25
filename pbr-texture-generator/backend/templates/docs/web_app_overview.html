@@ -1,0 +1,110 @@
+{% extends "base_documentation.html" %}
+
+{% block title %}Web App Overview - MapMorph{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Web App Overview</h1>
+    <p>MapMorph is a powerful web-based tool designed to simplify the process of generating PBR textures from real-world images. This page provides a high-level overview of the application's core features and functionality.</p>
+
+    <hr>
+
+    <h2>Key Features</h2>
+
+    <ul>
+        <li><strong>AI-Powered Texture Generation:</strong> Convert real-world images into PBR textures with a single click.</li>
+        <li><strong>PBR Preset System:</strong> Ensure texture consistency across different rendering engines with predefined and custom PBR presets.</li>
+        <li><strong>Preference Management:</strong> Save and load user settings for a streamlined workflow.</li>
+        <li><strong>Cross-Platform Compatibility:</strong> Works in the browser with no installation required.</li>
+        <li><strong>Real-Time Previews:</strong> Visualize texture maps before exporting.</li>
+        <li><strong>Support for Multiple Workflows:</strong> Roughness/Metallic and Specular/Glossiness workflows are available.</li>
+    </ul>
+
+    <hr>
+
+    <h2>Logging In & User Accounts</h2>
+
+    <p>MapMorph supports both guest usage and user accounts. Logging in provides additional features such as:</p>
+    <ul>
+        <li>Saving and loading texture preferences</li>
+        <li>Accessing cloud storage for previously generated textures</li>
+        <li>Syncing settings across devices</li>
+    </ul>
+
+    <p>To create an account, simply click on the <strong>Sign Up</strong> button on the homepage.</p>
+
+    <hr>
+
+    <h2>Saving & Loading Preferences</h2>
+
+    <p>Users can save custom settings, including PBR presets, texture resolution, and output format. These settings can be loaded in future sessions for efficiency.</p>
+
+    <h3>How to Save Preferences:</h3>
+    <ol>
+        <li>Navigate to the <strong>Settings</strong> menu.</li>
+        <li>Adjust the parameters as needed.</li>
+        <li>Click the <strong>Save Preset</strong> button and assign a name.</li>
+    </ol>
+
+    <h3>Loading a Saved Preset:</h3>
+    <ol>
+        <li>Open the <strong>Settings</strong> menu.</li>
+        <li>Select a saved preset from the dropdown list.</li>
+        <li>Click <strong>Load</strong> to apply the settings.</li>
+    </ol>
+
+    <hr>
+
+    <h2>Understanding PBR Presets</h2>
+
+    <p>PBR presets help ensure that generated textures adhere to industry standards. MapMorph includes built-in presets for:</p>
+    <ul>
+        <li>Unity</li>
+        <li>Unreal Engine</li>
+        <li>Custom user-defined presets</li>
+    </ul>
+
+    <p>Users can also upload their own PBR configuration files for maximum flexibility.</p>
+
+    <hr>
+
+    <h2>Using MapMorph: Basic Workflow</h2>
+
+    <p>To generate textures using MapMorph, follow these simple steps:</p>
+
+    <h3>Step 1: Upload an Image</h3>
+    <ul>
+        <li>Click the <strong>Upload</strong> button and select a JPG, PNG, or TIFF file.</li>
+    </ul>
+
+    <h3>Step 2: Adjust Processing Settings</h3>
+    <ul>
+        <li>Choose the PBR workflow (Roughness/Metallic or Specular/Glossiness).</li>
+        <li>Enable optional AI-based material segmentation.</li>
+    </ul>
+
+    <h3>Step 3: Generate & Preview Textures</h3>
+    <ul>
+        <li>Click <strong>Generate</strong> to process the image.</li>
+        <li>Use the built-in viewer to inspect normal, roughness, and albedo maps.</li>
+    </ul>
+
+    <h3>Step 4: Export Textures</h3>
+    <ul>
+        <li>Download textures in PNG format.</li>
+        <li>Save the generated maps for future use.</li>
+    </ul>
+
+    <hr>
+
+    <h2>Next Steps</h2>
+
+    <p>Now that you have an overview of MapMorph’s web application, you can dive into specific guides for:</p>
+    <ul>
+        <li><a href="getting_started.html">Getting Started</a></li>
+        <li><a href="pbr_presets.html">PBR Presets & Customization</a></li>
+        <li><a href="texture_generation.html">Texture Generation & Exporting</a></li>
+    </ul>
+
+</div>
+{% endblock %}

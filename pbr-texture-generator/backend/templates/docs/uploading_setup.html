@@ -1,0 +1,86 @@
+{% extends "base_documentation.html" %}
+
+{% block title %}Uploading Textures & Setup - MapMorph{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Uploading Textures & Setup</h1>
+    <p>Before generating PBR textures in MapMorph, you need to upload an image. This page covers the supported formats, file size limitations, and common issues you might encounter.</p>
+
+    <hr>
+
+    <h2>Supported File Formats</h2>
+    <p>Currently, MapMorph supports the following image formats:</p>
+    <ul>
+        <li><strong>TGA (.tga)</strong></li>
+        <li><strong>JPEG (.jpg, .jpeg)</strong></li>
+        <li><strong>PNG (.png)</strong></li>
+        <li><strong>BMP (.bmp)</strong></li>
+    </ul>
+    <p><em>Support for additional formats (e.g., TIFF, EXR) is planned for future updates.</em></p>
+
+    <hr>
+
+    <h2>File Size & Resolution Limits</h2>
+    <p>To ensure smooth processing, your uploaded texture must meet these requirements:</p>
+    <ul>
+        <li>Minimum resolution: <strong>256 x 256 pixels</strong></li>
+        <li>Maximum resolution: <strong>4096 x 4096 pixels (4K)</strong></li>
+        <li>Maximum file size: <strong>10MB</strong></li>
+    </ul>
+    <p>Files that are too small, too large, or exceed the size limit will not be processed.</p>
+
+    <hr>
+
+    <h2>Uploading Process</h2>
+    <p>Follow these steps to upload your texture:</p>
+    <h3>Step 1: Select an Image</h3>
+    <ul>
+        <li>Click the <strong>Upload</strong> button.</li>
+        <li>Select a valid texture file from your device.</li>
+        <li>Ensure the file meets the supported format and size requirements.</li>
+    </ul>
+
+    <h3>Step 2: Verify Your Upload</h3>
+    <ul>
+        <li>After uploading, a preview of your texture will appear.</li>
+        <li>If the texture is incorrect or needs adjustments, you can click <strong>Reupload</strong> to select a different file.</li>
+    </ul>
+
+    <h3>Step 3: Proceed to Processing</h3>
+    <ul>
+        <li>Once satisfied with the uploaded image, click <strong>Process Texture</strong>.</li>
+        <li>MapMorph will begin analyzing the image and generating PBR texture maps.</li>
+    </ul>
+
+    <hr>
+
+    <h2>Common Upload Issues & Solutions</h2>
+
+    <h3>❌ File Format Not Supported</h3>
+    <p><strong>Issue:</strong> "Unsupported file format" error appears.</p>
+    <p><strong>Solution:</strong> Convert the image to a supported format (TGA, JPG, PNG, BMP) before uploading.</p>
+
+    <h3>❌ Image Too Large or Too Small</h3>
+    <p><strong>Issue:</strong> Image resolution is below 256x256 or exceeds 4K.</p>
+    <p><strong>Solution:</strong> Resize the image within the allowed range using an image editor.</p>
+
+    <h3>❌ File Too Large</h3>
+    <p><strong>Issue:</strong> "File exceeds 10MB limit" error.</p>
+    <p><strong>Solution:</strong> Compress the image or reduce resolution before uploading.</p>
+
+    <h3>❌ Upload Stuck or Not Responding</h3>
+    <p><strong>Issue:</strong> Upload progress bar gets stuck.</p>
+    <p><strong>Solution:</strong> Refresh the page, ensure your internet connection is stable, and try again.</p>
+
+    <hr>
+
+    <h2>Next Steps</h2>
+    <p>Once your texture is uploaded and verified, you can move on to:</p>
+    <ul>
+        <li><a href="texture_processing.html">Processing & Generating PBR Textures</a></li>
+        <li><a href="pbr_presets.html">Adjusting PBR Presets</a></li>
+    </ul>
+
+</div>
+{% endblock %}

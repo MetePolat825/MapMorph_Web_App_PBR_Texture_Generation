@@ -1,0 +1,86 @@
+{% extends "base_documentation.html" %}
+
+{% block title %}User Preferences - MapMorph{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>User Preferences</h1>
+    <p>MapMorph provides a range of customization options to help users tailor their texture generation workflow. This page covers all available preferences, including export configurations, AI-assisted tools, and processing settings.</p>
+
+    <hr>
+
+    <h2>Export Configuration</h2>
+    <p>Customize how your textures are saved and structured upon export.</p>
+    <ul>
+        <li><strong>File Format:</strong> Choose between PNG, TGA, BMP, or JPG.</li>
+        <li><strong>Resolution:</strong> Options range from 512x512 up to 4096x4096 (4K).</li>
+        <li><strong>Bit Depth:</strong> 8-bit or 16-bit for higher precision.</li>
+        <li><strong>Export Naming Scheme:</strong> Customize file names for easier organization.</li>
+        <li><strong>Batch Export:</strong> Enable/disable exporting multiple textures at once.</li>
+    </ul>
+
+    <hr>
+
+    <h2>PBR Presets</h2>
+    <p>MapMorph allows you to configure PBR values to match different rendering engines.</p>
+    <ul>
+        <li><strong>Standard Presets:</strong> Choose from default settings optimized for Unity, Unreal Engine, or Blender.</li>
+        <li><strong>Custom Presets:</strong> Upload or define your own PBR values for a more customized workflow.</li>
+        <li><strong>Preset Switching:</strong> Easily toggle between different workflows (Roughness/Metallic vs. Specular/Glossiness).</li>
+    </ul>
+
+    <hr>
+
+    <h2>AI-Assisted Tools</h2>
+    <p>MapMorph integrates AI-powered enhancements for texture generation.</p>
+    <ul>
+        <li><strong>Smart Material Segmentation:</strong> AI detects and categorizes different surface materials within an image.</li>
+        <li><strong>Auto Normal Map Refinement:</strong> Enhances normal map details for improved depth and accuracy.</li>
+        <li><strong>Seamless Texture Tiling:</strong> AI-assisted tiling ensures smooth texture repetition.</li>
+        <li><strong>Color Consistency Correction:</strong> Balances lighting and color to ensure uniform texture appearance.</li>
+    </ul>
+
+    <hr>
+
+    <h2>Processing Preferences</h2>
+    <p>Customize how textures are processed before final export.</p>
+    <ul>
+        <li><strong>Detail Intensity:</strong> Adjust how much fine detail is preserved in the output.</li>
+        <li><strong>Noise Reduction:</strong> Enable AI-powered noise filtering to remove unwanted grain.</li>
+        <li><strong>Texture Scaling:</strong> Upscale or downscale textures dynamically.</li>
+        <li><strong>Sharpening & Contrast:</strong> Fine-tune texture sharpness and contrast levels.</li>
+    </ul>
+
+    <hr>
+
+    <h2>UI & General Preferences</h2>
+    <p>Configure the interface and workflow for a better user experience.</p>
+    <ul>
+        <li><strong>Dark Mode:</strong> Toggle between light and dark themes.</li>
+        <li><strong>Auto-Save:</strong> Automatically save preference configurations.</li>
+        <li><strong>Keyboard Shortcuts:</strong> Enable quick-access hotkeys for faster workflow.</li>
+        <li><strong>Language Selection:</strong> Choose from multiple UI language options.</li>
+    </ul>
+
+    <hr>
+
+    <h2>Saving & Loading User Preferences</h2>
+    <p>MapMorph allows users to save and reload their preferences for a seamless workflow.</p>
+    <ul>
+        <li><strong>Save Preferences:</strong> Store your custom settings for future sessions.</li>
+        <li><strong>Load Preferences:</strong> Reload saved configurations at any time.</li>
+        <li><strong>Reset to Default:</strong> Revert settings to the original factory defaults.</li>
+    </ul>
+
+    <hr>
+
+    <h2>Next Steps</h2>
+    <p>Now that you understand user preferences, explore other key features:</p>
+    <ul>
+        <li><a href="texture_processing.html">Processing & Generating Textures</a></li>
+        <li><a href="pbr_presets.html">Configuring PBR Presets</a></li>
+        <li><a href="export_options.html">Exporting Your Textures</a></li>
+    </ul>
+
+</div>
+{% endblock %}

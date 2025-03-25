@@ -1,0 +1,70 @@
+Material,BaseColor,Roughness,IsMetallic
+Aluminum,#E9E9EB,10,1
+Banana,#A29B1C,50,0
+Blackboard,#0A0A0A,90,0
+Blood,#A40005,30,0
+Bone,#CACAA9,40,0
+Brass,#E2C671,20,1
+Brick,#43180F,90,0
+Car Paint,#191919,10,0
+Carrot,#B62B07,50,0
+Charcoal,#050505,80,0
+Chocolate,#2A170F,60,0
+Chromium,#A3A6A9,10,1
+Cobalt,#B0B3AC,20,1
+Coffee,#070505,70,0
+Concrete,#828282,80,0
+Cooking Oil,#BCAE17,5,0
+Copper,#EDB87F,20,1
+Diamond,#FFFFFF,0,0
+Egg Shell,#9C9FA1,50,0
+Eye (cornea),#FFFFFF,5,0
+Eye (lens),#FFFFFF,5,0
+Eye (sclera),#AD7D5E,50,0
+Gasoline,#FFE89D,5,0
+Glass,#FFFFFF,5,0
+Gold,#F1C25F,10,1
+Gray Card,#2E2E2E,50,0
+Honey,#D46B09,5,0
+Ice,#FFFFFF,5,0
+Iron,#87827E,20,1
+Ketchup,#2A0100,50,0
+Lead,#A1A0A3,10,1
+Lemon,#B77B00,50,0
+Marble,#D4C9C0,40,0
+Mercury,#C7C7C7,10,1
+Milk,#D0CFAD,5,0
+MIT Black,#000000,90,0
+Musou Black,#010101,95,0
+Nickel,#A5A09A,10,1
+Office Paper,#CAD4E1,50,0
+Pearl,#CCC0B3,40,0
+Petroleum,#070606,5,0
+Plastic (Acrylic),#FFFFFF,50,0
+Plastic (PC),#FFFFFF,50,0
+Plastic (PET),#FFFFFF,50,0
+Plastic (PP),#FFFFFF,50,0
+Plastic (PVC),#FFFFFF,50,0
+Platinum,#A9A39A,10,1
+Polyurethane,#FFFFFF,50,0
+Salt,#FFFFFF,5,0
+Sand,#705E3B,70,0
+Sapphire,#ABB9DA,10,0
+Silicon,#585E6B,20,1
+Silver,#F5F2EB,10,1
+Skin I,#D89E8D,50,0
+Skin II,#CC7C59,50,0
+Skin III,#9F6E57,50,0
+Skin IV,#6F3A21,50,0
+Skin V,#48261A,50,0
+Skin VI,#170D05,50,0
+Snow,#D9D9D9,5,0
+Soap Bubble,#FFFFFF,5,0
+Tire,#050505,90,0
+Titanium,#9D948B,10,1
+Toner (black),#0D0D0D,90,0
+Tungsten,#807F7A,10,1
+Vanadium,#868A8A,10,1
+Water,#FFFFFF,5,0
+Whiteboard,#DDDCC5,50,0
+Zinc,#CCD7DC,10,1
